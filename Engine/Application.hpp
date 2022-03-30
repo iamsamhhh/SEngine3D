@@ -1,6 +1,6 @@
 #include<iostream>
-#include "Internal/Renderer.hpp"
-#include "Internal/PropertyView.hpp"
+#include "Internal/Render/Renderer.hpp"
+#include "Internal/Window_and_UI/PropertyView.hpp"
 
 class Application
 {

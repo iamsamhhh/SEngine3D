@@ -4,7 +4,10 @@
             "name": "Mac",
             "includePath": [
                 "${workspaceFolder}/**",
-                "${workspaceFolder}/Engine/Internal"
+                // "${workspaceFolder}/Engine"
+                "${workspaceFolder}/Engine/Internal",
+                "${workspaceFolder}/Engine/Internal/Render",
+                "${workspaceFolder}/Engine/Internal/Window_and_UI"
             ],
             "defines": [],
             "macFrameworkPath": [

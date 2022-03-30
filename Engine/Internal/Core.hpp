@@ -2,5 +2,5 @@
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
-#include "FrameBuffer.hpp"
-#include "Window.hpp"
+#include "Render/FrameBuffer.hpp"
+#include "Window_and_UI/Window.hpp"
