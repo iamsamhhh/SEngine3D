@@ -52,7 +52,8 @@ void Application::Init(){
     ui->init(mWindow);
     ViewBuilder::AddViewInitializer(InitPropertyView);
     ViewBuilder::Build();
-    
+    LoggingSystem::Init();
+    CONSOLE_LOG_INFO("Logging system initialized!");
 }
 
 
@@ -115,4 +116,5 @@ void Application::ShutDown(){
     Renderer::ShutDown();
     delete mWindow;
     glfwTerminate();
+    LoggingSystem::ShutDown();
 }

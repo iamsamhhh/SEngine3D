@@ -16,6 +16,7 @@
 				"${workspaceFolder}/Engine/*.cpp",
 				"${workspaceFolder}/dependencies/include/imgui/*.cpp",
 				"${workspaceFolder}/Engine/glad.c",
+				"${workspaceFolder}/Engine/Utils/*.cpp",
 				"${workspaceFolder}/Engine/Internal/*.cpp",
 				"${workspaceFolder}/Engine/Internal/Render/*.cpp",
 				"${workspaceFolder}/Engine/Internal/Window_and_UI/*.cpp",

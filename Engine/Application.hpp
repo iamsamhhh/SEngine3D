@@ -1,6 +1,8 @@
 #include<iostream>
 #include "Internal/Render/Renderer.hpp"
 #include "Internal/Window_and_UI/PropertyView.hpp"
+#include "Utils/LoggingSystem.hpp"
+#include "Log.h"
 
 class Application
 {
