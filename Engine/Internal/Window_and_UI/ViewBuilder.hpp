@@ -4,11 +4,9 @@
 class ViewBuilder
 {
 private:
-    static EditorView::InitializingViewFunc initViewFuncs[MAX_VIEW_NUM];
     static int count;
 public:
-    static void AddViewInitializer(EditorView::InitializingViewFunc func);
-    static void Build();
+    static void AddView(EditorView* view);
     static int GetCount();
     static EditorView* views[MAX_VIEW_NUM];
 };

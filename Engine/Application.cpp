@@ -1,10 +1,16 @@
 #include "Application.hpp"
 
 bool Application::propertyViewIsOpen = true;
+bool Application::sceneViewIsOpen = true;
 
 Application* Application::instance = nullptr;
 Application::~Application()
 {
+    ui->end();
+    Renderer::ShutDown();
+    delete mWindow;
+    glfwTerminate();
+    LoggingSystem::ShutDown();
 }
 
 void Application::frameBufferCallback(GLFWwindow* window, int width, int height){
@@ -12,10 +18,6 @@ void Application::frameBufferCallback(GLFWwindow* window, int width, int height)
     fWindow->height = height;
     fWindow->width = width;
     instance->Render();
-}
-
-EditorView* InitPropertyView(){
-    return (EditorView* )(new PropertyView(&Application::propertyViewIsOpen));
 }
 
 glm::vec2 mousePos = glm::vec2(0);
@@ -50,8 +52,8 @@ void Application::Init(){
     Renderer::Init();
     ui = new UI();
     ui->init(mWindow);
-    ViewBuilder::AddViewInitializer(InitPropertyView);
-    ViewBuilder::Build();
+    ViewBuilder::AddView((EditorView* )(new PropertyView(&Application::propertyViewIsOpen)));
+    ViewBuilder::AddView((EditorView* )(new SceneView(&Application::sceneViewIsOpen)));
     LoggingSystem::Init();
     CONSOLE_LOG_INFO("Logging system initialized!");
 }
@@ -109,12 +111,4 @@ void Application::Loop(){
         ProcessInput();
         Render();
     }
-}
-
-void Application::ShutDown(){
-    ui->end();
-    Renderer::ShutDown();
-    delete mWindow;
-    glfwTerminate();
-    LoggingSystem::ShutDown();
 }

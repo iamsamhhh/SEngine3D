@@ -1,6 +1,7 @@
 #include<iostream>
 #include "Internal/Render/Renderer.hpp"
 #include "Internal/Window_and_UI/PropertyView.hpp"
+#include "Internal/Window_and_UI/SceneView.hpp"
 #include "Utils/LoggingSystem.hpp"
 #include "Log.h"
 
@@ -20,5 +21,6 @@ public:
     static void frameBufferCallback(GLFWwindow* window, int width, int height);
     ~Application();
     static bool propertyViewIsOpen;
+    static bool sceneViewIsOpen;
 };
 

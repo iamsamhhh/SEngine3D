@@ -7,7 +7,7 @@ int main()
     
     Application::instance->Init();
     Application::instance->Loop();
-    Application::instance->ShutDown();
+    delete Application::instance;
 
     return 0;
 }
