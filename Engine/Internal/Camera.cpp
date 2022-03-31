@@ -6,7 +6,7 @@ void Camera::Move(glm::vec3 moveAmount){
 
 void Camera::Rotate(glm::vec3 rotateAmount){
     rot += rotateAmount;
-    std::cout << "x: " << rot.x << "    y: " << rot.y << "    z: " << rot.z << "\n";
+    // std::cout << "x: " << rot.x << "    y: " << rot.y << "    z: " << rot.z << "\n";
 }
 
 // glm::vec3 Camera::get_up()
