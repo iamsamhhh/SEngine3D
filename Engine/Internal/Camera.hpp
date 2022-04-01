@@ -4,6 +4,7 @@
 class Camera
 {
 private:
+    glm::mat4 view;
     // float mPitch, mYaw;
     // const glm::vec3 cRight = { 1.0f, 0.0f, 0.0f };
 	// const glm::vec3 cUp = { 0.0f, 1.0f, 0.0f };
@@ -11,9 +12,10 @@ private:
 public:
     glm::vec3 pos;
     glm::vec3 rot;
-    Camera() : pos(glm::vec3(0)), rot(glm::vec3(0)){}
+    Camera() : view(glm::mat4(1)), pos(glm::vec3(0)), rot(glm::vec3(0)){}
     void Rotate(glm::vec3 rotateAmount);
     void Move(glm::vec3 moveAmount);
+    glm::mat4 GetViewMat();
     // glm::vec3 get_up();
     // glm::vec3 get_right();
     // glm::vec3 get_forward();

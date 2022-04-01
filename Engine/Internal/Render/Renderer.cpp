@@ -71,15 +71,12 @@ void Renderer::RenderObject(float ratio){
         glEnableVertexAttribArray(0);
         Shader* shader = materials[i].Use();
         glm::mat4 model      = glm::mat4(1.0f);
-        glm::mat4 view       = glm::mat4(1.0f);
         glm::mat4 projection = glm::mat4(1.0f);
         // model = glm::rotate(model, (float)0, glm::vec3(0.5f, 0.5f, 0.0f));
-        view  = glm::rotate(view, glm::length(mMainCam->rot), glm::normalize(mMainCam->rot));
-        view  = glm::translate(view, mMainCam->pos);
         projection = glm::perspective(glm::radians(45.0f), ratio, 0.1f, 100.0f);
         shader->setVec4("color", 1,1,1,1);
         shader->setMat4("model", model);
-        shader->setMat4("view", view);
+        shader->setMat4("view", mMainCam->GetViewMat());
         shader->setMat4("projection", projection);
         // std::cout << materials[i].vertices << "\ncount " << materials[i].count/3 << "\n";
         glDrawArrays(GL_TRIANGLES, 0, materials[i].count/3);
