@@ -94,12 +94,6 @@ void Renderer::Render(){
     mFramebuffer->bind();
     RenderObject((float)mSceneSize.x/(float)mSceneSize.y);
     mFramebuffer->unbind();
-    ImGui::Begin("Scene");
-    // ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
-    // mSceneSize = viewportPanelSize;
-    // uint64_t textureID = mFramebuffer->get_texture();
-    // ImGui::Image(reinterpret_cast<void*>(textureID), viewportPanelSize, ImVec2(0, 1), ImVec2(1, 0));
-    ImGui::End();
 }
 
 void Renderer::ShutDown(){
