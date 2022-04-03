@@ -68,6 +68,12 @@
         "vector": "cpp",
         "__tree": "cpp",
         "map": "cpp",
-        "__availability": "cpp"
-    }
+        "__availability": "cpp",
+        "queue": "cpp",
+        "condition_variable": "cpp",
+        "thread": "cpp",
+        "set": "cpp",
+        "any": "cpp"
+    },
+    "C_Cpp.errorSquiggles": "Disabled"
 }

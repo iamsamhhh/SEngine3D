@@ -5,7 +5,9 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/Engine",
+                "${workspaceFolder}/Engine/External",
                 "${workspaceFolder}/Engine/Internal",
+                "${workspaceFolder}/Engine/Internal/ECS",
                 "${workspaceFolder}/Engine/Internal/Render",
                 "${workspaceFolder}/Engine/Internal/Window_and_UI",
                 "${workspaceFolder}/Engine/Utils"
