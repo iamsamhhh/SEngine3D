@@ -41,7 +41,7 @@ void CursorPosCallback(GLFWwindow* window, double xpos, double ypos){
             double xDif = xpos - mousePos.x;
             double yDif = ypos - mousePos.y;
 
-            Renderer::GetMainCam()->Rotate(glm::vec3(yDif/500, xDif/500, 0));
+            Renderer::GetMainCam()->Rotate(glm::vec3(xDif/500, yDif/500, 0));
 
             mousePos.x = xpos;
             mousePos.y = ypos;
@@ -158,11 +158,11 @@ void Application::Init(){
 
 void Application::ProcessInput(){
     if (glfwGetKey(mWindow->GetWindow(), GLFW_KEY_W)){
-        Renderer::GetMainCam()->Move(glm::vec3(0, 0, 0.02f));
+        Renderer::GetMainCam()->Move(0.02f * Renderer::GetMainCam()->GetForward());
     }
     if (glfwGetKey(mWindow->GetWindow(), GLFW_KEY_S))
     {
-        Renderer::GetMainCam()->Move(glm::vec3(0, 0, -0.02f));
+        Renderer::GetMainCam()->Move(-0.02f * Renderer::GetMainCam()->GetForward());
     }
 
     if (glfwGetKey(mWindow->GetWindow(), GLFW_KEY_D)){
