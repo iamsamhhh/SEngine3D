@@ -4,45 +4,6 @@ Material* Renderer::materials[MAX_NUM_OF_MAT]{};
 ImVec2 Renderer::mSceneSize = {1080, 720};
 FrameBuffer* Renderer::mFramebuffer = nullptr;
 Camera* Renderer::mMainCam = nullptr;
-// float vertices[] = {
-//     -0.5f, -0.5f, -0.5f,
-//      0.5f, -0.5f, -0.5f,
-//      0.5f,  0.5f, -0.5f,
-//      0.5f,  0.5f, -0.5f,
-//     -0.5f,  0.5f, -0.5f,
-//     -0.5f, -0.5f, -0.5f,
-//     -0.5f, -0.5f,  0.5f,
-//      0.5f, -0.5f,  0.5f,
-//      0.5f,  0.5f,  0.5f,
-//      0.5f,  0.5f,  0.5f,
-//     -0.5f,  0.5f,  0.5f,
-//     -0.5f, -0.5f,  0.5f,
-//     -0.5f,  0.5f,  0.5f,
-//     -0.5f,  0.5f, -0.5f,
-//     -0.5f, -0.5f, -0.5f,
-//     -0.5f, -0.5f, -0.5f,
-//     -0.5f, -0.5f,  0.5f,
-//     -0.5f,  0.5f,  0.5f,
-//      0.5f,  0.5f,  0.5f,
-//      0.5f,  0.5f, -0.5f,
-//      0.5f, -0.5f, -0.5f,
-//      0.5f, -0.5f, -0.5f,
-//      0.5f, -0.5f,  0.5f,
-//      0.5f,  0.5f,  0.5f,
-//     -0.5f, -0.5f, -0.5f,
-//      0.5f, -0.5f, -0.5f,
-//      0.5f, -0.5f,  0.5f,
-//      0.5f, -0.5f,  0.5f,
-//     -0.5f, -0.5f,  0.5f,
-//     -0.5f, -0.5f, -0.5f,
-//     -0.5f,  0.5f, -0.5f,
-//      0.5f,  0.5f, -0.5f,
-//      0.5f,  0.5f,  0.5f,
-//      0.5f,  0.5f,  0.5f,
-//     -0.5f,  0.5f,  0.5f,
-//     -0.5f,  0.5f, -0.5f,
-//     EOD
-// };
 
 void Renderer::Init(){
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -50,8 +11,7 @@ void Renderer::Init(){
         std::cout << "Failed to initialize GLAD" << std::endl;
         return;
     }
-    // materials[0] = Material("/Users/chenyuxuansam/dev/SEngine3D/SEngine3D/Engine/Shaders/OneColor.vs", "/Users/chenyuxuansam/dev/SEngine3D/SEngine3D/Engine/Shaders/OneColor.fs");
-    // materials[0].SetMeshData(vertices);
+    
     mFramebuffer = new FrameBuffer();
     mFramebuffer->create_buffers(1920, 1080);
     mMainCam = new Camera();
