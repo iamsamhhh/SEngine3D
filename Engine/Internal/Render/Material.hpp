@@ -1,6 +1,8 @@
+#pragma once
+
 #include "Shader.h"
 
-#define MAX_VERTICIES_PER_MAT 3000
+#define MAX_VERTICIES_PER_MAT 5000
 #define EOD 0.2468013579f
 
 class Material

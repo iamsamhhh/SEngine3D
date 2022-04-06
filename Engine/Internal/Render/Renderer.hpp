@@ -4,7 +4,7 @@
 
 class Renderer{
     private:
-    static Material materials[MAX_NUM_OF_MAT];
+    static Material* materials[MAX_NUM_OF_MAT];
     static FrameBuffer* mFramebuffer;
     static ImVec2 mSceneSize;
     static Camera* mMainCam;
@@ -12,6 +12,7 @@ class Renderer{
     static void Init();
     static void RenderObject(float ratio);
     static void Render();
+    static Material* CreateMaterial(const char* vertexShaderPath, const char* fragmentShaderPath);
     static void ShutDown();
     static Camera* GetMainCam();
     static uint32_t GetTexture();

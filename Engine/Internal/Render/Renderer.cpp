@@ -1,48 +1,48 @@
 #include "Renderer.hpp"
 
-Material Renderer::materials[MAX_NUM_OF_MAT]{};
+Material* Renderer::materials[MAX_NUM_OF_MAT]{};
 ImVec2 Renderer::mSceneSize = {1080, 720};
 FrameBuffer* Renderer::mFramebuffer = nullptr;
 Camera* Renderer::mMainCam = nullptr;
-float vertices[] = {
-    -0.5f, -0.5f, -0.5f,
-     0.5f, -0.5f, -0.5f,
-     0.5f,  0.5f, -0.5f,
-     0.5f,  0.5f, -0.5f,
-    -0.5f,  0.5f, -0.5f,
-    -0.5f, -0.5f, -0.5f,
-    -0.5f, -0.5f,  0.5f,
-     0.5f, -0.5f,  0.5f,
-     0.5f,  0.5f,  0.5f,
-     0.5f,  0.5f,  0.5f,
-    -0.5f,  0.5f,  0.5f,
-    -0.5f, -0.5f,  0.5f,
-    -0.5f,  0.5f,  0.5f,
-    -0.5f,  0.5f, -0.5f,
-    -0.5f, -0.5f, -0.5f,
-    -0.5f, -0.5f, -0.5f,
-    -0.5f, -0.5f,  0.5f,
-    -0.5f,  0.5f,  0.5f,
-     0.5f,  0.5f,  0.5f,
-     0.5f,  0.5f, -0.5f,
-     0.5f, -0.5f, -0.5f,
-     0.5f, -0.5f, -0.5f,
-     0.5f, -0.5f,  0.5f,
-     0.5f,  0.5f,  0.5f,
-    -0.5f, -0.5f, -0.5f,
-     0.5f, -0.5f, -0.5f,
-     0.5f, -0.5f,  0.5f,
-     0.5f, -0.5f,  0.5f,
-    -0.5f, -0.5f,  0.5f,
-    -0.5f, -0.5f, -0.5f,
-    -0.5f,  0.5f, -0.5f,
-     0.5f,  0.5f, -0.5f,
-     0.5f,  0.5f,  0.5f,
-     0.5f,  0.5f,  0.5f,
-    -0.5f,  0.5f,  0.5f,
-    -0.5f,  0.5f, -0.5f,
-    EOD
-};
+// float vertices[] = {
+//     -0.5f, -0.5f, -0.5f,
+//      0.5f, -0.5f, -0.5f,
+//      0.5f,  0.5f, -0.5f,
+//      0.5f,  0.5f, -0.5f,
+//     -0.5f,  0.5f, -0.5f,
+//     -0.5f, -0.5f, -0.5f,
+//     -0.5f, -0.5f,  0.5f,
+//      0.5f, -0.5f,  0.5f,
+//      0.5f,  0.5f,  0.5f,
+//      0.5f,  0.5f,  0.5f,
+//     -0.5f,  0.5f,  0.5f,
+//     -0.5f, -0.5f,  0.5f,
+//     -0.5f,  0.5f,  0.5f,
+//     -0.5f,  0.5f, -0.5f,
+//     -0.5f, -0.5f, -0.5f,
+//     -0.5f, -0.5f, -0.5f,
+//     -0.5f, -0.5f,  0.5f,
+//     -0.5f,  0.5f,  0.5f,
+//      0.5f,  0.5f,  0.5f,
+//      0.5f,  0.5f, -0.5f,
+//      0.5f, -0.5f, -0.5f,
+//      0.5f, -0.5f, -0.5f,
+//      0.5f, -0.5f,  0.5f,
+//      0.5f,  0.5f,  0.5f,
+//     -0.5f, -0.5f, -0.5f,
+//      0.5f, -0.5f, -0.5f,
+//      0.5f, -0.5f,  0.5f,
+//      0.5f, -0.5f,  0.5f,
+//     -0.5f, -0.5f,  0.5f,
+//     -0.5f, -0.5f, -0.5f,
+//     -0.5f,  0.5f, -0.5f,
+//      0.5f,  0.5f, -0.5f,
+//      0.5f,  0.5f,  0.5f,
+//      0.5f,  0.5f,  0.5f,
+//     -0.5f,  0.5f,  0.5f,
+//     -0.5f,  0.5f, -0.5f,
+//     EOD
+// };
 
 void Renderer::Init(){
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -50,8 +50,8 @@ void Renderer::Init(){
         std::cout << "Failed to initialize GLAD" << std::endl;
         return;
     }
-    materials[0] = Material("/Users/chenyuxuansam/dev/SEngine3D/SEngine3D/Engine/Shaders/OneColor.vs", "/Users/chenyuxuansam/dev/SEngine3D/SEngine3D/Engine/Shaders/OneColor.fs");
-    materials[0].SetMeshData(vertices);
+    // materials[0] = Material("/Users/chenyuxuansam/dev/SEngine3D/SEngine3D/Engine/Shaders/OneColor.vs", "/Users/chenyuxuansam/dev/SEngine3D/SEngine3D/Engine/Shaders/OneColor.fs");
+    // materials[0].SetMeshData(vertices);
     mFramebuffer = new FrameBuffer();
     mFramebuffer->create_buffers(1920, 1080);
     mMainCam = new Camera();
@@ -59,17 +59,27 @@ void Renderer::Init(){
     mMainCam->Rotate(glm::vec3(0.001f));
 }
 
+Material* Renderer::CreateMaterial(const char* vertexShaderPath, const char* fragmentShaderPath){
+    Material* mat = new Material(vertexShaderPath, fragmentShaderPath);
+    // CONSOLE_LOG_INFO("{}", Material::matCount-1)
+    materials[Material::matCount-1] = mat;
+    return mat;
+}
+
 void Renderer::RenderObject(float ratio){
+    // CONSOLE_LOG_INFO("in Renderer::Render");
     GLuint VAO, VBO;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
     glBindVertexArray(VAO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), (void*)0);
+    // CONSOLE_LOG_INFO("here?");
     for (int i = 0; i < Material::matCount; i++) {
-        glBufferData(GL_ARRAY_BUFFER, sizeof(materials[i].vertices), materials[i].vertices, GL_STATIC_DRAW);
+        // CONSOLE_LOG_INFO("in Renderer::Render loop");
+        glBufferData(GL_ARRAY_BUFFER, sizeof(materials[i]->vertices), materials[i]->vertices, GL_STATIC_DRAW);
         glEnableVertexAttribArray(0);
-        Shader* shader = materials[i].Use();
+        Shader* shader = materials[i]->Use();
         glm::mat4 model      = glm::mat4(1.0f);
         glm::mat4 projection = glm::mat4(1.0f);
         // model = glm::rotate(model, (float)0, glm::vec3(0.5f, 0.5f, 0.0f));
@@ -79,10 +89,11 @@ void Renderer::RenderObject(float ratio){
         shader->setMat4("view", mMainCam->GetViewMat());
         shader->setMat4("projection", projection);
         // std::cout << materials[i].vertices << "\ncount " << materials[i].count/3 << "\n";
-        glDrawArrays(GL_TRIANGLES, 0, materials[i].count/3);
+        glDrawArrays(GL_TRIANGLES, 0, materials[i]->count/3);
     }
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
+    // CONSOLE_LOG_INFO("after Renderer::Render loop");
 }
 
 Camera* Renderer::GetMainCam(){return mMainCam;}

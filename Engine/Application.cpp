@@ -1,7 +1,13 @@
 #include "Application.hpp"
+#include "Internal/ECS/Transform.hpp"
+#include "Internal/ECS/MoveSystem.hpp"
+#include "Internal/ECS/RenderSystem.hpp"
+#include "Internal/ECS/Mesh.hpp"
+#include "Internal/ECS/MeshRenderer.hpp"
 
 bool Application::propertyViewIsOpen = true;
 bool Application::sceneViewIsOpen = true;
+ECS_Manager ecsManager;
 
 Application* Application::instance = nullptr;
 Application::~Application()
@@ -45,6 +51,9 @@ void CursorPosCallback(GLFWwindow* window, double xpos, double ypos){
         releasedRight = true;
     }
 }
+
+std::shared_ptr<MoveSystem> moveSystem;
+std::shared_ptr<RenderSystem> renderSystem;
 void Application::Init(){
     mWindow = new Window("SEngine", 1080, 720, frameBufferCallback);
     glfwSetWindowUserPointer(mWindow->GetWindow(), mWindow);
@@ -56,6 +65,94 @@ void Application::Init(){
     ViewBuilder::AddView((EditorView* )(new SceneView(&Application::sceneViewIsOpen)));
     LoggingSystem::Init();
     CONSOLE_LOG_INFO("Logging system initialized!");
+    ecsManager.Init();
+    ecsManager.RegisterComponent<Transform>();
+    ecsManager.RegisterComponent<Mesh>();
+    ecsManager.RegisterComponent<MeshRenderer>();
+
+    moveSystem = ecsManager.RegisterSystem<MoveSystem>();
+    renderSystem = ecsManager.RegisterSystem<RenderSystem>();
+
+    Signature signature;
+
+    signature.set(ecsManager.GetComponentType<Transform>());
+	ecsManager.SetSystemSignature<MoveSystem>(signature);
+
+    Signature signature2;
+
+    signature2.set(ecsManager.GetComponentType<Mesh>());
+    signature2.set(ecsManager.GetComponentType<MeshRenderer>());
+	ecsManager.SetSystemSignature<RenderSystem>(signature2);
+
+	std::vector<Entity> entities(5);
+    Material* mat = Renderer::CreateMaterial("/Users/chenyuxuansam/dev/SEngine3D/SEngine3D/Engine/Shaders/OneColor.vs", "/Users/chenyuxuansam/dev/SEngine3D/SEngine3D/Engine/Shaders/OneColor.fs");
+    for (auto& entity : entities)
+	{
+		entity = ecsManager.CreateEntity();
+
+		ecsManager.AddComponent(
+			entity,
+			Transform{
+				.position   = glm::vec3(0, 0, 0),
+				.rotation   = glm::vec3(0, 0, 0),
+				.scale      = glm::vec3(1, 1, 1)
+		    }
+        );
+
+        ecsManager.AddComponent(
+			entity,
+			Mesh{
+				.verticies = {
+                    -0.5f, -0.5f, -0.5f,
+                     0.5f, -0.5f, -0.5f,
+                     0.5f,  0.5f, -0.5f,
+                     0.5f,  0.5f, -0.5f,
+                    -0.5f,  0.5f, -0.5f,
+                    -0.5f, -0.5f, -0.5f,
+                    -0.5f, -0.5f,  0.5f,
+                     0.5f, -0.5f,  0.5f,
+                     0.5f,  0.5f,  0.5f,
+                     0.5f,  0.5f,  0.5f,
+                    -0.5f,  0.5f,  0.5f,
+                    -0.5f, -0.5f,  0.5f,
+                    -0.5f,  0.5f,  0.5f,
+                    -0.5f,  0.5f, -0.5f,
+                    -0.5f, -0.5f, -0.5f,
+                    -0.5f, -0.5f, -0.5f,
+                    -0.5f, -0.5f,  0.5f,
+                    -0.5f,  0.5f,  0.5f,
+                     0.5f,  0.5f,  0.5f,
+                     0.5f,  0.5f, -0.5f,
+                     0.5f, -0.5f, -0.5f,
+                     0.5f, -0.5f, -0.5f,
+                     0.5f, -0.5f,  0.5f,
+                     0.5f,  0.5f,  0.5f,
+                    -0.5f, -0.5f, -0.5f,
+                     0.5f, -0.5f, -0.5f,
+                     0.5f, -0.5f,  0.5f,
+                     0.5f, -0.5f,  0.5f,
+                    -0.5f, -0.5f,  0.5f,
+                    -0.5f, -0.5f, -0.5f,
+                    -0.5f,  0.5f, -0.5f,
+                     0.5f,  0.5f, -0.5f,
+                     0.5f,  0.5f,  0.5f,
+                     0.5f,  0.5f,  0.5f,
+                    -0.5f,  0.5f,  0.5f,
+                    -0.5f,  0.5f, -0.5f,
+                    EOD
+                }
+		    }
+        );
+
+        ecsManager.AddComponent(
+			entity,
+			MeshRenderer{
+				.material = mat
+		    }
+        );
+	}
+    renderSystem->Init();
+    CONSOLE_LOG_INFO("init success");
 }
 
 
@@ -110,5 +207,6 @@ void Application::Loop(){
     {
         ProcessInput();
         Render();
+        moveSystem->Update(0.01f);
     }
 }
