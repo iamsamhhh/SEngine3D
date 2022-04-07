@@ -8,7 +8,9 @@ public:
 
     bool init(Window* window);
 
-    void pre_render();
+    void BeginMenuBar();
+
+    void EndMenuBar();
 
     void post_render();
 

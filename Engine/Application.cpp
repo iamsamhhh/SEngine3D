@@ -191,7 +191,23 @@ void Application::Render(){
     glClear(GL_COLOR_BUFFER_BIT);
 
 
-    ui->pre_render();
+    ui->BeginMenuBar();
+    if (ImGui::BeginMenu("SEngine")) {
+        if (ImGui::MenuItem("Quit")){
+          glfwSetWindowShouldClose(mWindow->GetWindow(), true);
+        }
+        ImGui::EndMenu();
+    }
+    if (ImGui::BeginMenu("Windows")) {
+        if (ImGui::MenuItem("Scene", NULL, &Application::sceneViewIsOpen)){
+        }
+        if (ImGui::MenuItem("Property", NULL, &Application::propertyViewIsOpen)){
+        }
+        if (ImGui::MenuItem("Debug", NULL, &Application::debugViewIsOpen)){
+        }
+        ImGui::EndMenu();
+    }
+    ui->EndMenuBar();
     for (int i = 0; i < ViewBuilder::GetCount(); i++)
     {
         ViewBuilder::views[i]->Render();

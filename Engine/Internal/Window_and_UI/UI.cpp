@@ -16,7 +16,7 @@ bool UI::init(Window* window){
   return true;
 }
 
-void UI::pre_render(){
+void UI::BeginMenuBar(){
   // Start the Dear ImGui frame
   ImGui_ImplOpenGL3_NewFrame();
   ImGui_ImplGlfw_NewFrame();
@@ -35,12 +35,9 @@ void UI::pre_render(){
   ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
   ImGui::Begin("InvisibleWindow", nullptr, windowFlags);
   ImGui::BeginMenuBar();
-  if (ImGui::BeginMenu("SEngine")) {
-    if (ImGui::MenuItem("Quit")){
-      glfwSetWindowShouldClose(mWindow->GetWindow(), true);
-    }
-    ImGui::EndMenu();
-  }
+}
+
+void UI::EndMenuBar(){
   ImGui::EndMenuBar();
   ImGui::PopStyleVar(3);
   ImGuiID dockSpaceId = ImGui::GetID("InvisibleWindowDockSpace");
