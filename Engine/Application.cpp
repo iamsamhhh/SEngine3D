@@ -158,27 +158,24 @@ void Application::Init(){
 
 void Application::ProcessInput(){
     if (glfwGetKey(mWindow->GetWindow(), GLFW_KEY_W)){
-        Renderer::GetMainCam()->Move(0.02f * Renderer::GetMainCam()->GetForward());
+        Renderer::GetMainCam()->Move(0.02f * Renderer::GetMainCam() ->  GetForward());
     }
-    if (glfwGetKey(mWindow->GetWindow(), GLFW_KEY_S))
-    {
-        Renderer::GetMainCam()->Move(-0.02f * Renderer::GetMainCam()->GetForward());
+    if (glfwGetKey(mWindow->GetWindow(), GLFW_KEY_S)){
+        Renderer::GetMainCam()->Move(-0.02f * Renderer::GetMainCam()->  GetForward());
     }
 
     if (glfwGetKey(mWindow->GetWindow(), GLFW_KEY_D)){
-        Renderer::GetMainCam()->Move(glm::vec3(-0.02f, 0, 0));
+        Renderer::GetMainCam()->Move(-0.02f * Renderer::GetMainCam()->  GetLeft());
     }
-    if (glfwGetKey(mWindow->GetWindow(), GLFW_KEY_A))
-    {
-        Renderer::GetMainCam()->Move(glm::vec3(0.02f, 0, 0));
+    if (glfwGetKey(mWindow->GetWindow(), GLFW_KEY_A)){
+        Renderer::GetMainCam()->Move(0.02f * Renderer::GetMainCam() ->  GetLeft());
     }
 
     if (glfwGetKey(mWindow->GetWindow(), GLFW_KEY_E)){
-        Renderer::GetMainCam()->Move(glm::vec3(0, 0.02f, 0));
+        Renderer::GetMainCam()->Move(0.02f * Renderer::GetMainCam() -> GetUp());
     }
-    if (glfwGetKey(mWindow->GetWindow(), GLFW_KEY_Q))
-    {
-        Renderer::GetMainCam()->Move(glm::vec3(0, -0.02f, 0));
+    if (glfwGetKey(mWindow->GetWindow(), GLFW_KEY_Q)){
+        Renderer::GetMainCam()->Move(-0.02f * Renderer::GetMainCam()-> GetUp());
     }
 }
 
