@@ -14,7 +14,6 @@ private:
     void ProcessInput();
     void Render();
 public:
-    
     Application() : mWindow(nullptr), ui(nullptr){}
     void Init();
     void Loop();
