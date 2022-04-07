@@ -7,11 +7,11 @@
 #include "Utils/DebugView.hpp"
 #include "Utils/Debug.hpp"
 #include "Internal/Window_and_UI/MainWindow.hpp"
+#include "Utils/Default.hpp"
 
 bool Application::propertyViewIsOpen = true;
 bool Application::sceneViewIsOpen = true;
 bool Application::debugViewIsOpen = true;
-ECS_Manager ecsManager;
 
 Application* Application::instance = nullptr;
 Application::~Application()
@@ -63,13 +63,10 @@ void RenderAll(){
 }
 
 // TODO: there is so many things going on here. find a way to clean this
-std::shared_ptr<MoveSystem> moveSystem;
-std::shared_ptr<RenderSystem> renderSystem;
 void Application::Init(){
 
     // -------------------------------------Window init----------------=-----------------------
     mWindow = new MainWindow("SEngine", 1080, 720, RenderAll);
-    glfwSetWindowUserPointer(mWindow->GetWindow(), mWindow);
     glfwSetCursorPosCallback(mWindow->GetWindow(), CursorPosCallback);
 
     // ------------------------------------Renderer init---------------------------------------
@@ -79,105 +76,11 @@ void Application::Init(){
     ui = new UI();
     ui->init(mWindow);
 
-    // -----------------------------------Editor views init------------------------------------
-    ViewBuilder::AddView((EditorView* )(new PropertyView(&Application::propertyViewIsOpen)));
-    ViewBuilder::AddView((EditorView* )(new SceneView(&Application::sceneViewIsOpen)));
-    ViewBuilder::AddView((EditorView* )(new DebugView(&Application::debugViewIsOpen)));
-
     //---------------------------------------Logging init--------------------------------------
     LoggingSystem::Init();
     CONSOLE_LOG_INFO("Logging system initialized!");
 
-    // ----------------------------------------ecs init----------------------------------------
-    // there's way too many things going on here
-    ecsManager.Init();
-    ecsManager.RegisterComponent<Transform>();
-    ecsManager.RegisterComponent<Mesh>();
-    ecsManager.RegisterComponent<MeshRenderer>();
-
-    moveSystem = ecsManager.RegisterSystem<MoveSystem>();
-    renderSystem = ecsManager.RegisterSystem<RenderSystem>();
-
-    Signature signature;
-
-    signature.set(ecsManager.GetComponentType<Transform>());
-	ecsManager.SetSystemSignature<MoveSystem>(signature);
-
-    Signature signature2;
-
-    signature2.set(ecsManager.GetComponentType<Mesh>());
-    signature2.set(ecsManager.GetComponentType<MeshRenderer>());
-	ecsManager.SetSystemSignature<RenderSystem>(signature2);
-
-	std::vector<Entity> entities(5);
-    Material* mat = Renderer::CreateMaterial("/Users/chenyuxuansam/dev/SEngine3D/SEngine3D/Engine/Shaders/OneColor.vs", "/Users/chenyuxuansam/dev/SEngine3D/SEngine3D/Engine/Shaders/OneColor.fs");
-    for (auto& entity : entities)
-	{
-		entity = ecsManager.CreateEntity();
-
-		ecsManager.AddComponent(
-			entity,
-			Transform{
-				.position   = glm::vec3(0, 0, 0),
-				.rotation   = glm::vec3(0, 0, 0),
-				.scale      = glm::vec3(1, 1, 1)
-		    }
-        );
-
-        ecsManager.AddComponent(
-			entity,
-			Mesh{
-				.verticies = {
-                    -0.5f, -0.5f, -0.5f,
-                     0.5f, -0.5f, -0.5f,
-                     0.5f,  0.5f, -0.5f,
-                     0.5f,  0.5f, -0.5f,
-                    -0.5f,  0.5f, -0.5f,
-                    -0.5f, -0.5f, -0.5f,
-                    -0.5f, -0.5f,  0.5f,
-                     0.5f, -0.5f,  0.5f,
-                     0.5f,  0.5f,  0.5f,
-                     0.5f,  0.5f,  0.5f,
-                    -0.5f,  0.5f,  0.5f,
-                    -0.5f, -0.5f,  0.5f,
-                    -0.5f,  0.5f,  0.5f,
-                    -0.5f,  0.5f, -0.5f,
-                    -0.5f, -0.5f, -0.5f,
-                    -0.5f, -0.5f, -0.5f,
-                    -0.5f, -0.5f,  0.5f,
-                    -0.5f,  0.5f,  0.5f,
-                     0.5f,  0.5f,  0.5f,
-                     0.5f,  0.5f, -0.5f,
-                     0.5f, -0.5f, -0.5f,
-                     0.5f, -0.5f, -0.5f,
-                     0.5f, -0.5f,  0.5f,
-                     0.5f,  0.5f,  0.5f,
-                    -0.5f, -0.5f, -0.5f,
-                     0.5f, -0.5f, -0.5f,
-                     0.5f, -0.5f,  0.5f,
-                     0.5f, -0.5f,  0.5f,
-                    -0.5f, -0.5f,  0.5f,
-                    -0.5f, -0.5f, -0.5f,
-                    -0.5f,  0.5f, -0.5f,
-                     0.5f,  0.5f, -0.5f,
-                     0.5f,  0.5f,  0.5f,
-                     0.5f,  0.5f,  0.5f,
-                    -0.5f,  0.5f,  0.5f,
-                    -0.5f,  0.5f, -0.5f,
-                    EOD
-                }
-		    }
-        );
-
-        ecsManager.AddComponent(
-			entity,
-			MeshRenderer{
-				.material = mat
-		    }
-        );
-	}
-    renderSystem->Init();
-
+    Default::Generate();
 
     CONSOLE_LOG_INFO("init success");
     Debug::Log("Wow");
@@ -249,8 +152,5 @@ void Application::Loop(){
     {
         ProcessInput();
         Render();
-
-        // TODO: create a function that updates all system at once
-        moveSystem->Update(0.01f);
     }
 }

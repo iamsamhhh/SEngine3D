@@ -6,15 +6,14 @@
 // #include "../Render/Renderer.hpp"
 #include "../../Log.h"
 
-extern ECS_Manager ecsManager;
-
 void RenderSystem::Init()
 {
+    
     for (auto const& entity : mEntities)
 	{
 		// Transform transform = ecsManager.GetComponent<Transform>(entity);
-        Mesh mesh = ecsManager.GetComponent<Mesh>(entity);
-        MeshRenderer renderer = ecsManager.GetComponent<MeshRenderer>(entity);
+        Mesh mesh = ECS_Manager::ecsManager->GetComponent<Mesh>(entity);
+        MeshRenderer renderer = ECS_Manager::ecsManager->GetComponent<MeshRenderer>(entity);
 
         renderer.material->SetMeshData(mesh.verticies);
 	}

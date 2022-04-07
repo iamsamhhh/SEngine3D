@@ -9,6 +9,9 @@
 class ECS_Manager
 {
 public:
+
+	static std::shared_ptr<ECS_Manager> ecsManager;
+
 	void Init()
 	{
 		// Create pointers to each manager

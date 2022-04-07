@@ -13,6 +13,7 @@ void MainWindow::OnResize(GLFWwindow* window, int width, int height){
 
 MainWindow::MainWindow(const char* title, int width, int height, RenderFunc func) : Window(title, width, height, OnResize){
     renderFunc = func;
+    glfwSetWindowUserPointer(GetWindow(), this);
 }
 
 MainWindow::~MainWindow()
