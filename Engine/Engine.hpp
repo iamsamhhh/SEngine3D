@@ -3,20 +3,20 @@
 #include "Utils/LoggingSystem.hpp"
 #include "Log.h"
 
-class Application
+class Engine
 {
 private:
     Window* mWindow;
     UI* ui;
     void ProcessInput();
 public:
-    Application() : mWindow(nullptr), ui(nullptr){}
+    Engine() : mWindow(nullptr), ui(nullptr){}
     void Init();
     void Loop();
     void Render();
-    ~Application();
+    ~Engine();
     static void frameBufferCallback(GLFWwindow* window, int width, int height);
-    static Application* instance;
+    static Engine* instance;
     static bool propertyViewIsOpen;
     static bool sceneViewIsOpen;
     static bool debugViewIsOpen;

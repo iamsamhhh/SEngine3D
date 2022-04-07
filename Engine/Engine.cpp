@@ -1,10 +1,10 @@
-#include "Application.hpp"
+#include "Engine.hpp"
 #include "Utils/Debug.hpp"
 #include "Internal/Window_and_UI/MainWindow.hpp"
 #include "Utils/Default.hpp"
 
-Application* Application::instance = nullptr;
-Application::~Application()
+Engine* Engine::instance = nullptr;
+Engine::~Engine()
 {
     ui->end();
     Renderer::ShutDown();
@@ -14,10 +14,10 @@ Application::~Application()
 }
 
 void RenderAll(){
-    Application::instance->Render();
+    Engine::instance->Render();
 }
 
-void Application::Init(){
+void Engine::Init(){
 
     mWindow = new MainWindow("SEngine", 1080, 720, RenderAll);
 
@@ -31,11 +31,11 @@ void Application::Init(){
     Default::Generate();
 }
 
-void Application::ProcessInput(){
+void Engine::ProcessInput(){
     Renderer::GetMainCam()->ProcesssInput(mWindow->GetWindow());
 }
 
-void Application::Render(){
+void Engine::Render(){
 
     Renderer::PreRender(mWindow);
 
@@ -68,7 +68,7 @@ void Application::Render(){
     glfwSwapBuffers(mWindow->GetWindow());
 }
 
-void Application::Loop(){
+void Engine::Loop(){
     while (!mWindow->WindowShouldClose())
     {
         ProcessInput();

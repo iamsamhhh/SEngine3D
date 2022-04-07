@@ -1,13 +1,13 @@
-#include "Application.hpp"
+#include "Engine.hpp"
 
 
 int main()
 {  
-    Application::instance = new Application();
+    Engine::instance = new Engine();
     
-    Application::instance->Init();
-    Application::instance->Loop();
-    delete Application::instance;
+    Engine::instance->Init();
+    Engine::instance->Loop();
+    delete Engine::instance;
 
     return 0;
 }
