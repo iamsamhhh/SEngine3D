@@ -23,5 +23,6 @@ public:
     ~Application();
     static bool propertyViewIsOpen;
     static bool sceneViewIsOpen;
+    static bool debugViewIsOpen;
 };
 

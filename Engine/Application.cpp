@@ -4,9 +4,11 @@
 #include "Internal/ECS/RenderSystem.hpp"
 #include "Internal/ECS/Mesh.hpp"
 #include "Internal/ECS/MeshRenderer.hpp"
+#include "Utils/DebugView.hpp"
 
 bool Application::propertyViewIsOpen = true;
 bool Application::sceneViewIsOpen = true;
+bool Application::debugViewIsOpen = true;
 ECS_Manager ecsManager;
 
 Application* Application::instance = nullptr;
@@ -63,6 +65,7 @@ void Application::Init(){
     ui->init(mWindow);
     ViewBuilder::AddView((EditorView* )(new PropertyView(&Application::propertyViewIsOpen)));
     ViewBuilder::AddView((EditorView* )(new SceneView(&Application::sceneViewIsOpen)));
+    ViewBuilder::AddView((EditorView* )(new DebugView(&Application::debugViewIsOpen)));
     LoggingSystem::Init();
     CONSOLE_LOG_INFO("Logging system initialized!");
     ecsManager.Init();

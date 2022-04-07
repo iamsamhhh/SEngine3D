@@ -2,7 +2,7 @@
 #include "../Render/Renderer.hpp"
 void SceneView::OnRender(){
     ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
-    mSceneSize = viewportPanelSize;
+    Renderer::mSceneSize = viewportPanelSize;
     uint64_t textureID = Renderer::GetTexture();
-    ImGui::Image(textureID, viewportPanelSize, ImVec2(0, 1), ImVec2(1, 0));
+    ImGui::Image(reinterpret_cast<void*>(textureID), Renderer::mSceneSize, ImVec2(0, 1), ImVec2(1, 0));
 }
