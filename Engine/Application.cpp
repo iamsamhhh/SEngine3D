@@ -5,6 +5,7 @@
 #include "Internal/ECS/Mesh.hpp"
 #include "Internal/ECS/MeshRenderer.hpp"
 #include "Utils/DebugView.hpp"
+#include "Utils/Debug.hpp"
 
 bool Application::propertyViewIsOpen = true;
 bool Application::sceneViewIsOpen = true;
@@ -156,6 +157,7 @@ void Application::Init(){
 	}
     renderSystem->Init();
     CONSOLE_LOG_INFO("init success");
+    Debug::Log("Wow");
 }
 
 
