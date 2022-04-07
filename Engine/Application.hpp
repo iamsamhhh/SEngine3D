@@ -1,9 +1,6 @@
 #include<iostream>
 #include "Internal/Render/Renderer.hpp"
-#include "Internal/Window_and_UI/PropertyView.hpp"
-#include "Internal/Window_and_UI/SceneView.hpp"
 #include "Utils/LoggingSystem.hpp"
-#include "Internal/ECS/ECS_Manager.hpp"
 #include "Log.h"
 
 class Application

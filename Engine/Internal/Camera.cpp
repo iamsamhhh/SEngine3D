@@ -1,4 +1,5 @@
 #include "Camera.hpp"
+#include "Render/Renderer.hpp"
 
 void Camera::UpdateViewMat(){
     view  = glm::rotate(glm::mat4(1.0f), mHeading, glm::vec3(0, 1, 0));
@@ -15,6 +16,29 @@ void Camera::Rotate(glm::vec3 rotateAmount){
     mHeading += rotateAmount.x;
     mPitch += rotateAmount.y;
     UpdateViewMat();
+}
+
+void Camera::ProcesssInput(GLFWwindow* window){
+    if (glfwGetKey(window, GLFW_KEY_W)){
+        Renderer::GetMainCam()->Move(0.02f * Renderer::GetMainCam() ->  GetForward());
+    }
+    if (glfwGetKey(window, GLFW_KEY_S)){
+        Renderer::GetMainCam()->Move(-0.02f * Renderer::GetMainCam()->  GetForward());
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_D)){
+        Renderer::GetMainCam()->Move(-0.02f * Renderer::GetMainCam()->  GetLeft());
+    }
+    if (glfwGetKey(window, GLFW_KEY_A)){
+        Renderer::GetMainCam()->Move(0.02f * Renderer::GetMainCam() ->  GetLeft());
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_E)){
+        Renderer::GetMainCam()->Move(0.02f * Renderer::GetMainCam() -> GetUp());
+    }
+    if (glfwGetKey(window, GLFW_KEY_Q)){
+        Renderer::GetMainCam()->Move(-0.02f * Renderer::GetMainCam()-> GetUp());
+    }
 }
 
 glm::quat Camera::GetHeading()

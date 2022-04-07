@@ -14,6 +14,7 @@ public:
     Camera() : view(glm::mat4(1)), pos(glm::vec3(0)), rot(glm::vec3(0)){}
     void Rotate(glm::vec3 rotateAmount);
     void Move(glm::vec3 moveAmount);
+    void ProcesssInput(GLFWwindow* window);
     glm::mat4 GetViewMat();
     glm::quat GetHeading();
     glm::quat GetDir();

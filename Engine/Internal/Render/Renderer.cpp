@@ -19,6 +19,12 @@ void Renderer::Init(){
     mMainCam->Rotate(glm::vec3(0.001f));
 }
 
+void Renderer::PreRender(Window* window){
+    glViewport(0, 0, window->width, window->height);
+    glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+}
+
 Material* Renderer::CreateMaterial(const char* vertexShaderPath, const char* fragmentShaderPath){
     Material* mat = new Material(vertexShaderPath, fragmentShaderPath);
     // CONSOLE_LOG_INFO("{}", Material::matCount-1)
