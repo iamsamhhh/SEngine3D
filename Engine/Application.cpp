@@ -6,6 +6,7 @@
 #include "Internal/ECS/MeshRenderer.hpp"
 #include "Utils/DebugView.hpp"
 #include "Utils/Debug.hpp"
+#include "Internal/Window_and_UI/MainWindow.hpp"
 
 bool Application::propertyViewIsOpen = true;
 bool Application::sceneViewIsOpen = true;
@@ -23,12 +24,12 @@ Application::~Application()
 }
 
 // TODO: Should move into window
-void Application::frameBufferCallback(GLFWwindow* window, int width, int height){
-    Window* fWindow = (Window*)glfwGetWindowUserPointer(window);
-    fWindow->height = height;
-    fWindow->width = width;
-    instance->Render();
-}
+// void Application::frameBufferCallback(GLFWwindow* window, int width, int height){
+//     Window* fWindow = (Window*)glfwGetWindowUserPointer(window);
+//     fWindow->height = height;
+//     fWindow->width = width;
+//     instance->Render();
+// }
 
 // TODO: why is this even in application??
 glm::vec2 mousePos = glm::vec2(0);
@@ -57,6 +58,9 @@ void CursorPosCallback(GLFWwindow* window, double xpos, double ypos){
     }
 }
 
+void RenderAll(){
+    Application::instance->Render();
+}
 
 // TODO: there is so many things going on here. find a way to clean this
 std::shared_ptr<MoveSystem> moveSystem;
@@ -64,7 +68,7 @@ std::shared_ptr<RenderSystem> renderSystem;
 void Application::Init(){
 
     // -------------------------------------Window init----------------=-----------------------
-    mWindow = new Window("SEngine", 1080, 720, frameBufferCallback);
+    mWindow = new MainWindow("SEngine", 1080, 720, RenderAll);
     glfwSetWindowUserPointer(mWindow->GetWindow(), mWindow);
     glfwSetCursorPosCallback(mWindow->GetWindow(), CursorPosCallback);
 

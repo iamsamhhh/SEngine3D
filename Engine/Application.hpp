@@ -12,11 +12,11 @@ private:
     Window* mWindow;
     UI* ui;
     void ProcessInput();
-    void Render();
 public:
     Application() : mWindow(nullptr), ui(nullptr){}
     void Init();
     void Loop();
+    void Render();
     ~Application();
     static void frameBufferCallback(GLFWwindow* window, int width, int height);
     static Application* instance;
