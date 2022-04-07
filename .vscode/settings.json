@@ -73,7 +73,8 @@
         "condition_variable": "cpp",
         "thread": "cpp",
         "set": "cpp",
-        "any": "cpp"
+        "any": "cpp",
+        "filesystem": "cpp"
     },
     "C_Cpp.errorSquiggles": "Disabled"
 }

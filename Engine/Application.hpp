@@ -11,16 +11,16 @@ class Application
 private:
     Window* mWindow;
     UI* ui;
+    void ProcessInput();
+    void Render();
 public:
-    static Application* instance;
+    
     Application() : mWindow(nullptr), ui(nullptr){}
     void Init();
-    void Render();
     void Loop();
-    void ShutDown();
-    void ProcessInput();
-    static void frameBufferCallback(GLFWwindow* window, int width, int height);
     ~Application();
+    static void frameBufferCallback(GLFWwindow* window, int width, int height);
+    static Application* instance;
     static bool propertyViewIsOpen;
     static bool sceneViewIsOpen;
     static bool debugViewIsOpen;
