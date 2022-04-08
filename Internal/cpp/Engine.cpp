@@ -2,8 +2,8 @@
 #include "Internal/Engine.hpp"
 #include "Internal/LoggingSystem.hpp"
 #include "Internal/MainWindow.hpp"
-#include "Internal/Default.hpp"
 #include "Internal/ViewBuilder.hpp"
+#include "Default.hpp"
 #include "Log.h"
 #include "Debug.hpp"
 namespace SEngine_Internal{
@@ -76,6 +76,7 @@ void Engine::Loop(){
     while (!mWindow->WindowShouldClose())
     {
         ProcessInput();
+        Default::moveSystem->Update(0.01f);
         Render();
     }
 }

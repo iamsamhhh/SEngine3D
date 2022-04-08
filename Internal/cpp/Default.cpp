@@ -1,4 +1,4 @@
-#include "Internal/Default.hpp"
+#include "Default.hpp"
 #include "Internal/PropertyView.hpp"
 #include "Internal/SceneView.hpp"
 #include "Internal/ViewBuilder.hpp"
@@ -11,13 +11,20 @@
 #include "MeshRenderer.hpp"
 #include "ECS_Manager.hpp"
 
-namespace SEngine_Internal{
+using namespace SEngine_Internal;
+
+namespace SEngine{
 bool Default::sceneIsOpen    = true;
 bool Default::propertyIsOpen = true;
 bool Default::debugIsOpen    = true;
+Material* Default::defaultMat = nullptr;
+Shader* Default::defaultShader = nullptr;
 
-std::shared_ptr<RenderSystem> renderSystem;
-std::shared_ptr<MoveSystem> moveSystem;
+std::shared_ptr<RenderSystem>   Default::renderSystem = nullptr;
+std::shared_ptr<MoveSystem>     Default::moveSystem   = nullptr;
+void WhiteFunc(Shader* shader){
+    shader->setVec4("color", 1, 1, 1, 1);
+}
 void Default::Generate(){
 
     // -----------------------------------Editor views init------------------------------------
@@ -40,16 +47,18 @@ void Default::Generate(){
 	ECS_Manager::ecsManager->SetSystemSignature<MoveSystem>(signature);
 
     Signature signature2;
-
+    
+    signature2.set(ECS_Manager::ecsManager->GetComponentType<Transform>());
     signature2.set(ECS_Manager::ecsManager->GetComponentType<Mesh>());
     signature2.set(ECS_Manager::ecsManager->GetComponentType<MeshRenderer>());
 	ECS_Manager::ecsManager->SetSystemSignature<RenderSystem>(signature2);
 
     std::vector<Entity> entities(5);
-    Material* mat = Renderer::CreateMaterial(
+    defaultShader = new Shader(
         "/Users/chenyuxuansam/dev/SEngine3D/SEngine3D/Assets/Shaders/OneColor.vs",
         "/Users/chenyuxuansam/dev/SEngine3D/SEngine3D/Assets/Shaders/OneColor.fs"
     );
+    Material* mat = Renderer::CreateMaterial(defaultShader, WhiteFunc);
     for (auto& entity : entities)
 	{
 		entity = ECS_Manager::ecsManager->CreateEntity();
@@ -58,7 +67,8 @@ void Default::Generate(){
 			entity,
 			Transform{
 				.position   = glm::vec3(0, 0, 0),
-				.rotation   = glm::vec3(0, 0, 0),
+                .heading    = 0,
+                .pitch      = 0,
 				.scale      = glm::vec3(1, 1, 1)
 		    }
         );

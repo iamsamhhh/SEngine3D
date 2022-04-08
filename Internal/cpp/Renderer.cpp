@@ -1,4 +1,5 @@
 #include "Internal/Renderer.hpp"
+#include "Default.hpp"
 namespace SEngine_Internal{
 Material* Renderer::materials[MAX_NUM_OF_MAT]{};
 ImVec2 Renderer::mSceneSize = {1080, 720};
@@ -25,11 +26,35 @@ void Renderer::PreRender(Window* window){
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
-Material* Renderer::CreateMaterial(const char* vertexShaderPath, const char* fragmentShaderPath){
-    Material* mat = new Material(vertexShaderPath, fragmentShaderPath);
+Material* Renderer::CreateMaterial(SetVarInShaderFunc func){
+    Material* mat = new Material(Default::defaultShader, func);
     // CONSOLE_LOG_INFO("{}", Material::matCount-1)
     materials[Material::matCount-1] = mat;
     return mat;
+}
+
+Material* Renderer::CreateMaterial(Shader* shader, SetVarInShaderFunc func){
+    Material* mat = new Material(shader, func);
+    materials[Material::matCount-1] = mat;
+    return mat;
+}
+
+void Renderer::RegisterObject(Material* mat, int start, int end, Transform trans){
+    int count = end-start;
+    float* verticies;
+    verticies = &(mat->vertices[start]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float)*count, verticies, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glm::mat4 model         = glm::rotate(glm::mat4(1.0f), trans.heading, glm::vec3(0, 1, 0));
+    model                   = glm::rotate(model, trans.pitch, glm::rotate(glm::quat(glm::vec3(0,-trans.heading,0)), glm::vec3(1,0,0)));
+    model                   = glm::translate(model, trans.position);
+    glm::mat4 projection = glm::mat4(1.0f);
+    projection = glm::perspective(glm::radians(45.0f), (float)mSceneSize.x/(float)mSceneSize.y, 0.1f, 100.0f);
+    Shader* shader = mat->Use();
+    shader->setMat4("model", model);
+    shader->setMat4("view", mMainCam->GetViewMat());
+    shader->setMat4("projection", projection);
+    glDrawArrays(GL_TRIANGLES, 0, count/3);
 }
 
 void Renderer::RenderObject(float ratio){
@@ -40,23 +65,7 @@ void Renderer::RenderObject(float ratio){
     glBindVertexArray(VAO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), (void*)0);
-    // CONSOLE_LOG_INFO("here?");
-    for (int i = 0; i < Material::matCount; i++) {
-        // CONSOLE_LOG_INFO("in Renderer::Render loop");
-        glBufferData(GL_ARRAY_BUFFER, sizeof(materials[i]->vertices), materials[i]->vertices, GL_STATIC_DRAW);
-        glEnableVertexAttribArray(0);
-        Shader* shader = materials[i]->Use();
-        glm::mat4 model      = glm::mat4(1.0f);
-        glm::mat4 projection = glm::mat4(1.0f);
-        // model = glm::rotate(model, (float)0, glm::vec3(0.5f, 0.5f, 0.0f));
-        projection = glm::perspective(glm::radians(45.0f), ratio, 0.1f, 100.0f);
-        shader->setVec4("color", 1,1,1,1);
-        shader->setMat4("model", model);
-        shader->setMat4("view", mMainCam->GetViewMat());
-        shader->setMat4("projection", projection);
-        // std::cout << materials[i].vertices << "\ncount " << materials[i].count/3 << "\n";
-        glDrawArrays(GL_TRIANGLES, 0, materials[i]->count/3);
-    }
+    Default::renderSystem->Update();
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
     // CONSOLE_LOG_INFO("after Renderer::Render loop");

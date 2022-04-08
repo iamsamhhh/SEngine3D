@@ -1,16 +1,16 @@
 #include "Material.hpp"
 namespace SEngine{
+
 int Material::matCount = 0;
-Material::Material(Shader shader)
+Material::Material(Shader* shader, SetVarInShaderFunc func) : shader(shader), func(func)
 {
-    Material::shader = shader;
     matCount++;
 }
 
 Material::~Material(){}
 
-Material::Material(const char* vertexShaderPath, const char* fragmentShaderPath){
-    Material::shader = Shader(vertexShaderPath, fragmentShaderPath);
+Material::Material(const char* vertexShaderPath, const char* fragmentShaderPath, SetVarInShaderFunc func) : shader(new Shader(vertexShaderPath, fragmentShaderPath)), func(func)
+{
     matCount++;
 }
 
@@ -30,7 +30,8 @@ void Material::SetMeshData(float* data){
 }
 
 Shader* Material::Use(){
-    shader.use();
-    return &shader;
+    shader->use();
+    func(shader);
+    return shader;
 }
 }

@@ -4,7 +4,7 @@ namespace SEngine{
 struct Transform
 {
 	glm::vec3 position;
-	glm::vec3 rotation;
+	float heading, pitch;
 	glm::vec3 scale;
 };
 }

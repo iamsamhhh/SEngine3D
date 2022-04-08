@@ -5,5 +5,6 @@ namespace SEngine{
 struct Mesh
 {
     float verticies[MAX_NUM_OF_VERTICIES * 3];
+    int start, end;
 };
 }

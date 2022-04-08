@@ -13,9 +13,9 @@ void MoveSystem::Update(float dt)
 {
 	for (auto const& entity : mEntities)
 	{
-		auto& transform = ECS_Manager::ecsManager->GetComponent<Transform>(entity);
+		Transform* transform = &ECS_Manager::ecsManager->GetComponent<Transform>(entity);
 
-		transform.position.x += dt;
+		transform->position.x += dt;
         // CONSOLE_LOG_INFO("posx: {}", transform.position.x)
 	}
 }
