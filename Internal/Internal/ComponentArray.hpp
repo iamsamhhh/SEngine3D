@@ -4,7 +4,8 @@
 #include <array>
 #include <cassert>
 #include <unordered_map>
-
+using namespace SEngine;
+namespace SEngine_Internal{
 class IComponentArray
 {
 public:
@@ -82,3 +83,4 @@ private:
 	// Total size of valid entries in the array.
 	size_t mSize;
 };
+}

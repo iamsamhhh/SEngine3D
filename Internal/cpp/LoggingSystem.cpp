@@ -1,7 +1,7 @@
 #include "Internal/LoggingSystem.hpp"
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
-
+namespace SEngine_Internal{
 void LoggingSystem::Init(){
     spdlog::set_pattern("%^[%T] [%l] %v%$");
     auto logger = spdlog::stdout_color_mt("Logger");
@@ -10,4 +10,5 @@ void LoggingSystem::Init(){
 
 void LoggingSystem::ShutDown(){
     spdlog::shutdown();
+}
 }

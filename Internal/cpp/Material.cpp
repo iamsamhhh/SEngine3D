@@ -1,4 +1,5 @@
 #include "Material.hpp"
+namespace SEngine{
 int Material::matCount = 0;
 Material::Material(Shader shader)
 {
@@ -31,4 +32,5 @@ void Material::SetMeshData(float* data){
 Shader* Material::Use(){
     shader.use();
     return &shader;
+}
 }

@@ -1,5 +1,5 @@
 #include "Internal/Renderer.hpp"
-
+namespace SEngine_Internal{
 Material* Renderer::materials[MAX_NUM_OF_MAT]{};
 ImVec2 Renderer::mSceneSize = {1080, 720};
 FrameBuffer* Renderer::mFramebuffer = nullptr;
@@ -75,3 +75,4 @@ void Renderer::ShutDown(){
 }
 
 uint32_t Renderer::GetTexture(){return mFramebuffer->get_texture();}
+}

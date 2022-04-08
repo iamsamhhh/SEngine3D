@@ -2,7 +2,7 @@
 #include<iostream>
 #include "MainWindow.hpp"
 #include "UI.hpp"
-
+namespace SEngine_Internal{
 class Engine
 {
 private:
@@ -18,4 +18,4 @@ public:
     static void frameBufferCallback(GLFWwindow* window, int width, int height);
     static Engine* instance;
 };
-
+}

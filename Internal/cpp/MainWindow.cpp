@@ -1,6 +1,6 @@
 #include "Internal/Renderer.hpp"
 #include "Internal/MainWindow.hpp"
-
+namespace SEngine_Internal{
 RenderFunc MainWindow::renderFunc = nullptr;
 
 void MainWindow::OnResize(GLFWwindow* window, int width, int height){
@@ -44,4 +44,5 @@ MainWindow::MainWindow(const char* title, int width, int height, RenderFunc func
 
 MainWindow::~MainWindow()
 {
+}
 }

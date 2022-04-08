@@ -1,7 +1,7 @@
 #include "Internal/Renderer.hpp"
 #include "Internal/Camera.hpp"
 #include "Internal/ViewBuilder.hpp"
-
+namespace SEngine_Internal{
 void Camera::UpdateViewMat(){
     view  = glm::rotate(glm::mat4(1.0f), mHeading, glm::vec3(0, 1, 0));
     view  = glm::rotate(view, mPitch, glm::rotate(GetHeading(), glm::vec3(1, 0, 0)));
@@ -64,3 +64,4 @@ glm::vec3 Camera::GetLeft(){
 }
 
 glm::mat4 Camera::GetViewMat(){return view;}
+}

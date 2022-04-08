@@ -1,5 +1,5 @@
 #include "Internal/DebugView.hpp"
-
+namespace SEngine_Internal{
 std::array<std::string, MAX_NUM_OF_LOG> DebugView::mLogs{};
 int DebugView::count = 0;
 void DebugView::AddLog(std::string log){
@@ -14,4 +14,5 @@ void DebugView::OnRender(){
     {
         ImGui::Text("%s", DebugView::mLogs[i].c_str());
     }
+}
 }

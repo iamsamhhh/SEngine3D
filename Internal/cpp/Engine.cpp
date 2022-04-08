@@ -6,7 +6,7 @@
 #include "Internal/ViewBuilder.hpp"
 #include "Log.h"
 #include "Debug.hpp"
-
+namespace SEngine_Internal{
 Engine* Engine::instance = nullptr;
 Engine::~Engine()
 {
@@ -78,4 +78,5 @@ void Engine::Loop(){
         ProcessInput();
         Render();
     }
+}
 }

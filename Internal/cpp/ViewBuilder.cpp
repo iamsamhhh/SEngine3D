@@ -1,5 +1,5 @@
 #include "Internal/ViewBuilder.hpp"
-
+namespace SEngine_Internal{
 int ViewBuilder::count = 0;
 EditorView* ViewBuilder::views[] = {};
 
@@ -9,3 +9,4 @@ void ViewBuilder::AddView(EditorView* view){
 }
 
 int ViewBuilder::GetCount(){return count;}
+}

@@ -1,6 +1,6 @@
 #pragma once
 #include "EditorView.hpp"
-
+namespace SEngine_Internal{
 class ViewBuilder
 {
 private:
@@ -10,3 +10,4 @@ public:
     static int GetCount();
     static EditorView* views[MAX_VIEW_NUM];
 };
+}

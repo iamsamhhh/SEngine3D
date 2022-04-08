@@ -1,10 +1,9 @@
 #pragma once
 
-#define MAX_VIEW_NUM 20
-
 #include <string>
 #include <imgui/imgui.h>
-
+namespace SEngine_Internal{
+#define MAX_VIEW_NUM 20
 class EditorView
 {
 public:
@@ -18,3 +17,4 @@ public:
 private:
     bool* isOpen;
 };
+}

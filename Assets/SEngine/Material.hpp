@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Shader.h"
-
+namespace SEngine{
 #define MAX_VERTICIES_PER_MAT 5000
 #define EOD 0.2468013579f
 
@@ -20,3 +20,4 @@ public:
     float vertices[MAX_VERTICIES_PER_MAT];
     ~Material();
 };
+}

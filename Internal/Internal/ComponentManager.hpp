@@ -5,7 +5,7 @@
 #include <any>
 #include <memory>
 #include <unordered_map>
-
+namespace SEngine_Internal{
 class ComponentManager
 {
 public:
@@ -91,3 +91,4 @@ private:
 		return std::static_pointer_cast<ComponentArray<T>>(mComponentArrays[typeName]);
 	}
 };
+}

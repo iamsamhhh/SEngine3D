@@ -1,7 +1,7 @@
 #pragma once
 
 #include "System.hpp"
-
+namespace SEngine{
 class MoveSystem : public System
 {
 public:
@@ -9,3 +9,4 @@ public:
 
 	void Update(float dt);
 };
+}

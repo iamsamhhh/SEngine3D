@@ -1,5 +1,6 @@
 #include "Internal/Engine.hpp"
 
+using namespace SEngine_Internal;
 
 int main()
 {  

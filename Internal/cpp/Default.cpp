@@ -11,7 +11,7 @@
 #include "MeshRenderer.hpp"
 #include "ECS_Manager.hpp"
 
-
+namespace SEngine_Internal{
 bool Default::sceneIsOpen    = true;
 bool Default::propertyIsOpen = true;
 bool Default::debugIsOpen    = true;
@@ -116,4 +116,5 @@ void Default::Generate(){
         );
 	}
     renderSystem->Init();
+}
 }

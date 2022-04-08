@@ -1,6 +1,6 @@
 #include "Internal/Window.hpp"
 #include "Log.h"
-
+namespace SEngine_Internal{
 bool Window::GLFWInited = false;
 Window::Window(const char* title, int scrWidth, int scrHeight, GLFWframebuffersizefun callback) : width(scrWidth), height(scrHeight)
 {
@@ -34,3 +34,4 @@ GLFWwindow* Window::GetWindow(){return window;}
 bool Window::WindowShouldClose(){return glfwWindowShouldClose(window);}
 
 Window::~Window(){glfwDestroyWindow(window);}
+}

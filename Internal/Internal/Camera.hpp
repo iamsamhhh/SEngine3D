@@ -2,7 +2,7 @@
 
 #include "Window.hpp"
 #include <glm/gtx/quaternion.hpp>
-
+namespace SEngine_Internal{
 class Camera
 {
 private:
@@ -23,3 +23,4 @@ public:
     glm::vec3 GetForward();
     glm::vec3 GetLeft();
 };
+}

@@ -4,7 +4,7 @@
 #include <array>
 #include <cassert>
 #include <queue>
-
+namespace SEngine_Internal{
 class EntityManager
 {
 public:
@@ -66,3 +66,4 @@ private:
 	// Total living entities - used to keep limits on how many exist
 	uint32_t mLivingEntityCount{};
 };
+}

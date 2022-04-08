@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-
+namespace SEngine{
 class Debug
 {
 private:
@@ -10,3 +10,4 @@ public:
     // static void LogError();
     // static void LogWarning();
 };
+}

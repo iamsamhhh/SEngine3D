@@ -1,6 +1,6 @@
 #pragma once
 #include "Window.hpp"
-
+namespace SEngine_Internal{
 class UI
 {
 public:
@@ -21,3 +21,4 @@ private:
 
     Window* mWindow;
 };
+}

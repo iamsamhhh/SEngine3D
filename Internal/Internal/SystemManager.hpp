@@ -5,7 +5,7 @@
 #include <cassert>
 #include <memory>
 #include <unordered_map>
-
+namespace SEngine_Internal{
 class SystemManager
 {
 public:
@@ -74,3 +74,4 @@ private:
 	// Map from system type string pointer to a system pointer
 	std::unordered_map<const char*, std::shared_ptr<System>> mSystems{};
 };
+}

@@ -2,7 +2,7 @@
 #include <imgui/imgui.h>
 #include <imgui/imgui_impl_glfw.h>
 #include <imgui/imgui_impl_opengl3.h>
-
+namespace SEngine_Internal{
 bool UI::init(Window* window){
   mWindow = window;
   IMGUI_CHECKVERSION();
@@ -65,4 +65,5 @@ void UI::end(){
   ImGui_ImplOpenGL3_Shutdown();
   ImGui_ImplGlfw_Shutdown();
   ImGui::DestroyContext();
+}
 }

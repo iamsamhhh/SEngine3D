@@ -3,7 +3,7 @@
 #include "EditorView.hpp"
 #include <string.h>
 #include <array>
-
+namespace SEngine_Internal{
 #define MAX_NUM_OF_LOG 10000
 
 class DebugView : public EditorView{
@@ -15,3 +15,4 @@ public:
     DebugView(bool* IsOpen) : EditorView("Debug", IsOpen){}
     void OnRender() override;
 };
+}

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Window.hpp"
-
+namespace SEngine_Internal{
 typedef void (* RenderFunc)();
 
 class MainWindow : public Window
@@ -16,3 +16,4 @@ public:
     MainWindow(const char* title, int width, int height, RenderFunc func);
     ~MainWindow();
 };
+}

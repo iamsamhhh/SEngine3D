@@ -1,5 +1,5 @@
 #pragma once
-
+namespace SEngine_Internal{
 class Default
 {
 private:
@@ -10,3 +10,4 @@ public:
     static bool propertyIsOpen;
     static bool debugIsOpen;
 };
+}

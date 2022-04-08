@@ -4,7 +4,8 @@
 #include "Camera.hpp"
 #include "Window.hpp"
 #include "imgui/imgui.h"
-
+using namespace SEngine;
+namespace SEngine_Internal{
 #define MAX_NUM_OF_MAT 100
 
 class Renderer{
@@ -23,3 +24,4 @@ class Renderer{
     static uint32_t GetTexture();
     static ImVec2 mSceneSize;
 };
+}

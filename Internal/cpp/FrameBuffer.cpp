@@ -1,6 +1,6 @@
 #include <glad/glad.h>
 #include "Internal/FrameBuffer.hpp"
-
+namespace SEngine_Internal{
 void FrameBuffer::create_buffers(int32_t width, int32_t height)
 {
     mWidth = width;
@@ -50,4 +50,5 @@ void FrameBuffer::unbind()
 uint32_t FrameBuffer::get_texture()
 {
     return mTexId;
+}
 }

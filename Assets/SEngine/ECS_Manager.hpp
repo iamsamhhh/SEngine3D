@@ -5,7 +5,7 @@
 #include "Internal/SystemManager.hpp"
 #include "Types.h"
 #include <memory>
-
+namespace SEngine{
 class ECS_Manager
 {
 public:
@@ -15,9 +15,9 @@ public:
 	void Init()
 	{
 		// Create pointers to each manager
-		mComponentManager = std::make_unique<ComponentManager>();
-		mEntityManager = std::make_unique<EntityManager>();
-		mSystemManager = std::make_unique<SystemManager>();
+		mComponentManager 	= std::make_unique<	SEngine_Internal::ComponentManager>();
+		mEntityManager 		= std::make_unique<	SEngine_Internal::EntityManager>();
+		mSystemManager 		= std::make_unique<	SEngine_Internal::SystemManager>();
 	}
 
 
@@ -95,7 +95,8 @@ public:
 	}
 
 private:
-	std::unique_ptr<ComponentManager> mComponentManager;
-	std::unique_ptr<EntityManager> mEntityManager;
-	std::unique_ptr<SystemManager> mSystemManager;
+	std::unique_ptr<SEngine_Internal::ComponentManager> mComponentManager;
+	std::unique_ptr<SEngine_Internal::EntityManager> mEntityManager;
+	std::unique_ptr<SEngine_Internal::SystemManager> mSystemManager;
 };
+}

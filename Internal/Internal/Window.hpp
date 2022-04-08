@@ -1,7 +1,7 @@
 #pragma once
 
 #include<GLFW/glfw3.h>
-
+namespace SEngine_Internal{
 class Window
 {
 private:
@@ -17,3 +17,4 @@ public:
     Window(const char* title, int scrWidth, int scrHeight, GLFWframebuffersizefun callback);
     ~Window();
 };
+}
