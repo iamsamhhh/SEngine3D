@@ -53,78 +53,72 @@ void Default::Generate(){
     signature2.set(ECS_Manager::ecsManager->GetComponentType<MeshRenderer>());
 	ECS_Manager::ecsManager->SetSystemSignature<RenderSystem>(signature2);
 
-    std::vector<Entity> entities(5);
     defaultShader = new Shader(
         "/Users/chenyuxuansam/dev/SEngine3D/SEngine3D/Assets/Shaders/OneColor.vs",
         "/Users/chenyuxuansam/dev/SEngine3D/SEngine3D/Assets/Shaders/OneColor.fs"
     );
     Material* mat = Renderer::CreateMaterial(defaultShader, WhiteFunc);
-    for (auto& entity : entities)
-	{
-		entity = ECS_Manager::ecsManager->CreateEntity();
-
-		ECS_Manager::ecsManager->AddComponent(
-			entity,
-			Transform{
-				.position   = glm::vec3(0, 0, 0),
-                .heading    = 0,
-                .pitch      = 0,
-				.scale      = glm::vec3(1, 1, 1)
-		    }
-        );
-
-        ECS_Manager::ecsManager->AddComponent(
-			entity,
-			Mesh{
-				.verticies = {
-                    -0.5f, -0.5f, -0.5f,
-                     0.5f, -0.5f, -0.5f,
-                     0.5f,  0.5f, -0.5f,
-                     0.5f,  0.5f, -0.5f,
-                    -0.5f,  0.5f, -0.5f,
-                    -0.5f, -0.5f, -0.5f,
-                    -0.5f, -0.5f,  0.5f,
-                     0.5f, -0.5f,  0.5f,
-                     0.5f,  0.5f,  0.5f,
-                     0.5f,  0.5f,  0.5f,
-                    -0.5f,  0.5f,  0.5f,
-                    -0.5f, -0.5f,  0.5f,
-                    -0.5f,  0.5f,  0.5f,
-                    -0.5f,  0.5f, -0.5f,
-                    -0.5f, -0.5f, -0.5f,
-                    -0.5f, -0.5f, -0.5f,
-                    -0.5f, -0.5f,  0.5f,
-                    -0.5f,  0.5f,  0.5f,
-                     0.5f,  0.5f,  0.5f,
-                     0.5f,  0.5f, -0.5f,
-                     0.5f, -0.5f, -0.5f,
-                     0.5f, -0.5f, -0.5f,
-                     0.5f, -0.5f,  0.5f,
-                     0.5f,  0.5f,  0.5f,
-                    -0.5f, -0.5f, -0.5f,
-                     0.5f, -0.5f, -0.5f,
-                     0.5f, -0.5f,  0.5f,
-                     0.5f, -0.5f,  0.5f,
-                    -0.5f, -0.5f,  0.5f,
-                    -0.5f, -0.5f, -0.5f,
-                    -0.5f,  0.5f, -0.5f,
-                     0.5f,  0.5f, -0.5f,
-                     0.5f,  0.5f,  0.5f,
-                     0.5f,  0.5f,  0.5f,
-                    -0.5f,  0.5f,  0.5f,
-                    -0.5f,  0.5f, -0.5f,
-                    EOD
-                }
-		    }
-        );
-
-        ECS_Manager::ecsManager->AddComponent(
-			entity,
-			MeshRenderer{
-				.material = mat
-		    }
-        );
-	}
+	Entity entity = ECS_Manager::ecsManager->CreateEntity();
+	ECS_Manager::ecsManager->AddComponent(
+		entity,
+		Transform{
+			.position   = glm::vec3(0, 0, 0),
+            .heading    = 0,
+            .pitch      = 0,
+			.scale      = glm::vec3(1, 1, 1)
+	    }
+    );
+    ECS_Manager::ecsManager->AddComponent(
+		entity,
+		Mesh{
+			.verticies = {
+                -0.5f, -0.5f, -0.5f,
+                 0.5f, -0.5f, -0.5f,
+                 0.5f,  0.5f, -0.5f,
+                 0.5f,  0.5f, -0.5f,
+                -0.5f,  0.5f, -0.5f,
+                -0.5f, -0.5f, -0.5f,
+                -0.5f, -0.5f,  0.5f,
+                 0.5f, -0.5f,  0.5f,
+                 0.5f,  0.5f,  0.5f,
+                 0.5f,  0.5f,  0.5f,
+                -0.5f,  0.5f,  0.5f,
+                -0.5f, -0.5f,  0.5f,
+                -0.5f,  0.5f,  0.5f,
+                -0.5f,  0.5f, -0.5f,
+                -0.5f, -0.5f, -0.5f,
+                -0.5f, -0.5f, -0.5f,
+                -0.5f, -0.5f,  0.5f,
+                -0.5f,  0.5f,  0.5f,
+                 0.5f,  0.5f,  0.5f,
+                 0.5f,  0.5f, -0.5f,
+                 0.5f, -0.5f, -0.5f,
+                 0.5f, -0.5f, -0.5f,
+                 0.5f, -0.5f,  0.5f,
+                 0.5f,  0.5f,  0.5f,
+                -0.5f, -0.5f, -0.5f,
+                 0.5f, -0.5f, -0.5f,
+                 0.5f, -0.5f,  0.5f,
+                 0.5f, -0.5f,  0.5f,
+                -0.5f, -0.5f,  0.5f,
+                -0.5f, -0.5f, -0.5f,
+                -0.5f,  0.5f, -0.5f,
+                 0.5f,  0.5f, -0.5f,
+                 0.5f,  0.5f,  0.5f,
+                 0.5f,  0.5f,  0.5f,
+                -0.5f,  0.5f,  0.5f,
+                -0.5f,  0.5f, -0.5f,
+                EOD
+            }
+	    }
+    );
+    ECS_Manager::ecsManager->AddComponent(
+		entity,
+		MeshRenderer{
+			.material = mat
+	    }
+    );
+	
     renderSystem->Init();
 }
 }

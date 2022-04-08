@@ -14,7 +14,7 @@ void Renderer::Init(){
     }
     
     mFramebuffer = new FrameBuffer();
-    mFramebuffer->create_buffers(1920, 1080);
+    mFramebuffer->create_buffers(3840, 2160);
     mMainCam = new Camera();
     mMainCam->Move(glm::vec3(0, 0, -3.0f));
     mMainCam->Rotate(glm::vec3(0.001f));
