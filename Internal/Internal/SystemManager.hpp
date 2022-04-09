@@ -5,6 +5,7 @@
 #include <cassert>
 #include <memory>
 #include <unordered_map>
+using namespace SEngine;
 namespace SEngine_Internal{
 class SystemManager
 {

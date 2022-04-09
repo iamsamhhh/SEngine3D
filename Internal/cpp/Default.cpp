@@ -21,26 +21,19 @@ bool Default::debugIsOpen    = true;
 Material* Default::defaultMat = nullptr;
 Shader* Default::defaultShader = nullptr;
 
-std::shared_ptr<RenderSystem>   Default::renderSystem = nullptr;
-std::shared_ptr<MoveSystem>     Default::moveSystem   = nullptr;
-std::shared_ptr<LightSystem>    Default::lightSystem  = nullptr;
+std::shared_ptr<RenderSystem>   Default::renderSystem   = nullptr;
+std::shared_ptr<MoveSystem>     Default::moveSystem     = nullptr;
+std::shared_ptr<LightSystem>    Default::lightSystem    = nullptr;
+std::shared_ptr<TransformSystem>Default::transformSystem= nullptr;
 
-glm::vec3 lightPos(0.0f, 0.0f, 2.0f);
+glm::vec3 lightPos(0.0f, 1.0f, 0.0f);
 #define CUBE_VERTICIES {-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f, 0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f, 0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f, 0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,-0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,-0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,-0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,-0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f, 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f, 0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f, 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f, 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f, 0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f, 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f, 0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f, 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f, 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,-0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f, 0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f, 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f, 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f, EOD}
 
 
 void Color(Shader* shader){
     shader->setVec3("objectColor", 0.3f, 0.9f, 0.5f);
-    shader->setVec3("lightColor", 1.0f, 1.0f, 1.0f);
-    shader->setVec3("lightPos", lightPos);
-    shader->setVec3("viewPos", Renderer::GetMainCam()->pos);
 }
 void Default::Generate(){
-
-    // -----------------------------------Editor views init------------------------------------
-    ViewBuilder::AddView(new PropertyView(&propertyIsOpen));
-    ViewBuilder::AddView(new SceneView(&sceneIsOpen));
-    ViewBuilder::AddView(new DebugView(&debugIsOpen));
 
     // ----------------------------------------ecs init----------------------------------------
     ECS_Manager::ecsManager->Init();
@@ -53,6 +46,7 @@ void Default::Generate(){
     moveSystem      = ECS_Manager::ecsManager->RegisterSystem<MoveSystem>();
     renderSystem    = ECS_Manager::ecsManager->RegisterSystem<RenderSystem>();
     lightSystem     = ECS_Manager::ecsManager->RegisterSystem<LightSystem>();
+    transformSystem     = ECS_Manager::ecsManager->RegisterSystem<TransformSystem>();
 
     Signature signature;
 
@@ -72,6 +66,11 @@ void Default::Generate(){
     sig3.set(ECS_Manager::ecsManager->GetComponentType<Transform>());
     sig3.set(ECS_Manager::ecsManager->GetComponentType<LightSource>());
     ECS_Manager::ecsManager->SetSystemSignature<LightSystem>(sig3);
+
+    Signature sig4;
+
+    sig4.set(ECS_Manager::ecsManager->GetComponentType<Transform>());
+    ECS_Manager::ecsManager->SetSystemSignature<TransformSystem>(sig4);
 
     defaultShader = new Shader(
         "/Users/chenyuxuansam/dev/SEngine3D/SEngine3D/Assets/Shaders/OneColor.vs",
@@ -101,39 +100,59 @@ void Default::Generate(){
     );
     ECS_Manager::ecsManager->AddComponent(
 		light,
+		LightSource{
+			.lightColor = glm::vec3(1.0f, 1.0f, 1.0f) * 0.8f
+	    }
+    );
+    ECS_Manager::ecsManager->AddComponent(
+		light,
 		MeshRenderer{
 			.material = lightMat
 	    }
     );
-	Entity entity = ECS_Manager::ecsManager->CreateEntity();
-	ECS_Manager::ecsManager->AddComponent(
+
+  std::vector<Entity> entities(3);
+  for (auto& entity : entities) {
+    entity = ECS_Manager::ecsManager->CreateEntity();
+
+	  ECS_Manager::ecsManager->AddComponent(
 		entity,
 		Transform{
-			.position   = glm::vec3(0, 0, 0),
-            .heading    = 0,
-            .pitch      = 0,
+			.position   = glm::vec3((entity-1)*1.5, 0, 0),
+      .heading    = 0,
+      .pitch      = 0,
 			.scale      = glm::vec3(1, 1, 1)
 	    }
     );
+
     // ECS_Manager::ecsManager->AddComponent(
     //     entity,
     //     Velocity{
     //         .velocity = glm::vec3(0, 0, 0.01f)
     //     }
     // );
+
     ECS_Manager::ecsManager->AddComponent(
 		entity,
 		Mesh{
 			.verticies = CUBE_VERTICIES
 	    }
     );
+
     ECS_Manager::ecsManager->AddComponent(
 		entity,
 		MeshRenderer{
 			.material = mat
 	    }
     );
-	
+
+  }
+
     renderSystem->Init();
+
+    // -----------------------------------Editor views init------------------------------------
+    ViewBuilder::AddView(new PropertyView(&propertyIsOpen));
+    ViewBuilder::AddView(new SceneView(&sceneIsOpen));
+    ViewBuilder::AddView(new DebugView(&debugIsOpen));
 }
 }

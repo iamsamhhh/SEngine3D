@@ -12,7 +12,6 @@ namespace SEngine_Internal{
 
 class Renderer{
     private:
-    static Material* materials[MAX_NUM_OF_MAT];
     static FrameBuffer* mFramebuffer;
     static Camera* mMainCam;
     static void RenderObject(float ratio);

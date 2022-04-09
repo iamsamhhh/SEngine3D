@@ -1,7 +1,6 @@
 #include "Internal/Renderer.hpp"
 #include "Default.hpp"
 namespace SEngine_Internal{
-Material* Renderer::materials[MAX_NUM_OF_MAT]{};
 ImVec2 Renderer::mSceneSize = {1080, 720};
 FrameBuffer* Renderer::mFramebuffer = nullptr;
 Camera* Renderer::mMainCam = nullptr;
@@ -30,13 +29,11 @@ void Renderer::PreRender(Window* window){
 
 Material* Renderer::CreateMaterial(SetVarInShaderFunc func){
     Material* mat = new Material(Default::defaultShader, func);
-    materials[Material::matCount-1] = mat;
     return mat;
 }
 
 Material* Renderer::CreateMaterial(Shader* shader, SetVarInShaderFunc func){
     Material* mat = new Material(shader, func);
-    materials[Material::matCount-1] = mat;
     return mat;
 }
 
@@ -58,9 +55,9 @@ void Renderer::RegisterObject(Material* mat, int start, int end, Transform trans
     shader->setMat4("model", model);
     shader->setMat4("view", mMainCam->GetViewMat());
     shader->setMat4("projection", projection);
-    shader->setVec3("lightColor", 1.0f, 1.0f, 1.0f);
+    shader->setVec3("lightColor", Default::lightSystem->GetColor(0));
     shader->setMat3("normalMat", normalMat);
-    shader->setVec3("lightPos", 0.0f, 0.0f, 1.0f);
+    shader->setVec3("lightPos", Default::lightSystem->GetPos(0));
     shader->setVec3("viewPos", mMainCam->pos);
     glDrawArrays(GL_TRIANGLES, 0, count/3);
 }
