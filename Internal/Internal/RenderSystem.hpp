@@ -1,8 +1,8 @@
 #pragma once
 
 #include "System.hpp"
-namespace SEngine{
-class RenderSystem : public System
+namespace SEngine_Internal{
+class RenderSystem : public SEngine::System
 {
 public:
 	void Init();

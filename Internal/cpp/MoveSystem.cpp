@@ -1,16 +1,12 @@
 #include "ECS_Manager.hpp"
-#include "MoveSystem.hpp"
+#include "Internal/MoveSystem.hpp"
 #include "Transform.hpp"
 #include "Velocity.hpp"
 #include "Log.h"
 
-extern ECS_Manager ecsManager;
+namespace SEngine_Internal{
 
-void MoveSystem::Init()
-{
-}
-
-void MoveSystem::Update(float dt)
+void MoveSystem::Update()
 {
 	for (auto const& entity : mEntities)
 	{
@@ -19,4 +15,5 @@ void MoveSystem::Update(float dt)
 
 		transform->position += velo->velocity;
 	}
+}
 }

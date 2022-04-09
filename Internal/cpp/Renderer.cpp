@@ -17,7 +17,7 @@ void Renderer::Init(){
     mFramebuffer->create_buffers(3840, 2160);
     mMainCam = new Camera();
     mMainCam->Move(glm::vec3(0, 0, -3.0f));
-    mMainCam->Rotate(glm::vec3(0.001f));
+    mMainCam->Rotate(glm::vec3(0));
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);
 }
@@ -51,12 +51,17 @@ void Renderer::RegisterObject(Material* mat, int start, int end, Transform trans
     model                   = glm::rotate(model, trans.pitch, glm::rotate(glm::quat(glm::vec3(0,-trans.heading,0)), glm::vec3(1,0,0)));
     model                   = glm::translate(model, trans.position);
     model                   = glm::scale(model, trans.scale);
+    glm::mat3 normalMat     = glm::transpose(glm::inverse(model));
     glm::mat4 projection    = glm::mat4(1.0f);
     projection = glm::perspective(glm::radians(45.0f), (float)mSceneSize.x/(float)mSceneSize.y, 0.1f, 100.0f);
     Shader* shader = mat->Use();
     shader->setMat4("model", model);
     shader->setMat4("view", mMainCam->GetViewMat());
     shader->setMat4("projection", projection);
+    shader->setVec3("lightColor", 1.0f, 1.0f, 1.0f);
+    shader->setMat3("normalMat", normalMat);
+    shader->setVec3("lightPos", 0.0f, 0.0f, 1.0f);
+    shader->setVec3("viewPos", mMainCam->pos);
     glDrawArrays(GL_TRIANGLES, 0, count/3);
 }
 

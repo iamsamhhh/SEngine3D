@@ -6,11 +6,11 @@
 #include "Internal/DebugView.hpp"
 #include "Transform.hpp"
 #include "Velocity.hpp"
-#include "MoveSystem.hpp"
-#include "RenderSystem.hpp"
 #include "Mesh.hpp"
 #include "MeshRenderer.hpp"
+#include "LightSource.hpp"
 #include "ECS_Manager.hpp"
+
 
 using namespace SEngine_Internal;
 
@@ -23,7 +23,9 @@ Shader* Default::defaultShader = nullptr;
 
 std::shared_ptr<RenderSystem>   Default::renderSystem = nullptr;
 std::shared_ptr<MoveSystem>     Default::moveSystem   = nullptr;
-glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
+std::shared_ptr<LightSystem>    Default::lightSystem  = nullptr;
+
+glm::vec3 lightPos(0.0f, 0.0f, 2.0f);
 #define CUBE_VERTICIES {-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f, 0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f, 0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f, 0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,-0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,-0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,-0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,-0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f, 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f, 0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f, 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f, 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f, 0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f, 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f, 0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f, 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f, 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,-0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f, 0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f, 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f, 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f, EOD}
 
 
@@ -31,6 +33,7 @@ void Color(Shader* shader){
     shader->setVec3("objectColor", 0.3f, 0.9f, 0.5f);
     shader->setVec3("lightColor", 1.0f, 1.0f, 1.0f);
     shader->setVec3("lightPos", lightPos);
+    shader->setVec3("viewPos", Renderer::GetMainCam()->pos);
 }
 void Default::Generate(){
 
@@ -45,9 +48,11 @@ void Default::Generate(){
     ECS_Manager::ecsManager->RegisterComponent<Velocity>();
     ECS_Manager::ecsManager->RegisterComponent<Mesh>();
     ECS_Manager::ecsManager->RegisterComponent<MeshRenderer>();
+    ECS_Manager::ecsManager->RegisterComponent<LightSource>();
 
-    moveSystem =    ECS_Manager::ecsManager->RegisterSystem<MoveSystem>();
-    renderSystem =  ECS_Manager::ecsManager->RegisterSystem<RenderSystem>();
+    moveSystem      = ECS_Manager::ecsManager->RegisterSystem<MoveSystem>();
+    renderSystem    = ECS_Manager::ecsManager->RegisterSystem<RenderSystem>();
+    lightSystem     = ECS_Manager::ecsManager->RegisterSystem<LightSystem>();
 
     Signature signature;
 
@@ -61,6 +66,12 @@ void Default::Generate(){
     signature2.set(ECS_Manager::ecsManager->GetComponentType<Mesh>());
     signature2.set(ECS_Manager::ecsManager->GetComponentType<MeshRenderer>());
 	ECS_Manager::ecsManager->SetSystemSignature<RenderSystem>(signature2);
+
+    Signature sig3;
+
+    sig3.set(ECS_Manager::ecsManager->GetComponentType<Transform>());
+    sig3.set(ECS_Manager::ecsManager->GetComponentType<LightSource>());
+    ECS_Manager::ecsManager->SetSystemSignature<LightSystem>(sig3);
 
     defaultShader = new Shader(
         "/Users/chenyuxuansam/dev/SEngine3D/SEngine3D/Assets/Shaders/OneColor.vs",
@@ -104,12 +115,12 @@ void Default::Generate(){
 			.scale      = glm::vec3(1, 1, 1)
 	    }
     );
-    ECS_Manager::ecsManager->AddComponent(
-        entity,
-        Velocity{
-            .velocity = glm::vec3(0, 0, 0.01f)
-        }
-    );
+    // ECS_Manager::ecsManager->AddComponent(
+    //     entity,
+    //     Velocity{
+    //         .velocity = glm::vec3(0, 0, 0.01f)
+    //     }
+    // );
     ECS_Manager::ecsManager->AddComponent(
 		entity,
 		Mesh{

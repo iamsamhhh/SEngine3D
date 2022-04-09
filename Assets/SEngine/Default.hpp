@@ -1,8 +1,9 @@
 #pragma once
 
 #include "Material.hpp"
-#include "RenderSystem.hpp"
-#include "MoveSystem.hpp"
+#include "Internal/RenderSystem.hpp"
+#include "Internal/MoveSystem.hpp"
+#include "Internal/LightSystem.hpp"
 
 namespace SEngine{
 class Default
@@ -16,7 +17,8 @@ public:
     static bool debugIsOpen;
     static Shader* defaultShader;
     static Material* defaultMat;
-    static std::shared_ptr<RenderSystem> renderSystem;
-    static std::shared_ptr<MoveSystem> moveSystem;
+    static std::shared_ptr<SEngine_Internal::RenderSystem>  renderSystem;
+    static std::shared_ptr<SEngine_Internal::MoveSystem>    moveSystem;
+    static std::shared_ptr<SEngine_Internal::LightSystem>   lightSystem;
 };
 }

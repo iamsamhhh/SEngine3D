@@ -76,7 +76,7 @@ void Engine::Loop(){
     while (!mWindow->WindowShouldClose())
     {
         ProcessInput();
-        Default::moveSystem->Update(0.01f);
+        Default::moveSystem->Update();
         Render();
     }
 }
