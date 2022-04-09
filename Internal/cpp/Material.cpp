@@ -31,7 +31,8 @@ void Material::SetMeshData(float* data){
 
 Shader* Material::Use(){
     shader->use();
-    func(shader);
+    if (func)
+        func(shader);
     return shader;
 }
 }

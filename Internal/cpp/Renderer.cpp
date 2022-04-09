@@ -22,7 +22,7 @@ void Renderer::Init(){
 
 void Renderer::PreRender(Window* window){
     glViewport(0, 0, window->width, window->height);
-    glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
@@ -48,7 +48,8 @@ void Renderer::RegisterObject(Material* mat, int start, int end, Transform trans
     glm::mat4 model         = glm::rotate(glm::mat4(1.0f), trans.heading, glm::vec3(0, 1, 0));
     model                   = glm::rotate(model, trans.pitch, glm::rotate(glm::quat(glm::vec3(0,-trans.heading,0)), glm::vec3(1,0,0)));
     model                   = glm::translate(model, trans.position);
-    glm::mat4 projection = glm::mat4(1.0f);
+    model                   = glm::scale(model, trans.scale);
+    glm::mat4 projection    = glm::mat4(1.0f);
     projection = glm::perspective(glm::radians(45.0f), (float)mSceneSize.x/(float)mSceneSize.y, 0.1f, 100.0f);
     Shader* shader = mat->Use();
     shader->setMat4("model", model);
