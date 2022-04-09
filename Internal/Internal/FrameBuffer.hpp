@@ -14,6 +14,7 @@ public:
 private:
   uint32_t mFBO = 0;
   uint32_t mTexId = 0;
+  uint32_t mDepthId = 0;
   int32_t mWidth = 0;
   int32_t mHeight = 0;
 };

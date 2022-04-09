@@ -18,17 +18,18 @@ void Renderer::Init(){
     mMainCam = new Camera();
     mMainCam->Move(glm::vec3(0, 0, -3.0f));
     mMainCam->Rotate(glm::vec3(0.001f));
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LEQUAL);
 }
 
 void Renderer::PreRender(Window* window){
     glViewport(0, 0, window->width, window->height);
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 Material* Renderer::CreateMaterial(SetVarInShaderFunc func){
     Material* mat = new Material(Default::defaultShader, func);
-    // CONSOLE_LOG_INFO("{}", Material::matCount-1)
     materials[Material::matCount-1] = mat;
     return mat;
 }
@@ -45,6 +46,7 @@ void Renderer::RegisterObject(Material* mat, int start, int end, Transform trans
     verticies = &(mat->vertices[start]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(float)*count, verticies, GL_STATIC_DRAW);
     glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
     glm::mat4 model         = glm::rotate(glm::mat4(1.0f), trans.heading, glm::vec3(0, 1, 0));
     model                   = glm::rotate(model, trans.pitch, glm::rotate(glm::quat(glm::vec3(0,-trans.heading,0)), glm::vec3(1,0,0)));
     model                   = glm::translate(model, trans.position);
@@ -65,7 +67,8 @@ void Renderer::RenderObject(float ratio){
     glGenBuffers(1, &VBO);
     glBindVertexArray(VAO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
     Default::renderSystem->Update();
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
