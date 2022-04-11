@@ -5,6 +5,7 @@
 #include "Internal/MoveSystem.hpp"
 #include "Internal/LightSystem.hpp"
 #include "Internal/TransformSystem.hpp"
+#include "GetEntitySystem.hpp"
 
 namespace SEngine{
 class Default
@@ -22,5 +23,6 @@ public:
     static std::shared_ptr<SEngine_Internal::MoveSystem>        moveSystem;
     static std::shared_ptr<SEngine_Internal::LightSystem>       lightSystem;
     static std::shared_ptr<SEngine_Internal::TransformSystem>   transformSystem;
+    static std::shared_ptr<GetEntitySystem>                     getEntitySystem;
 };
 }

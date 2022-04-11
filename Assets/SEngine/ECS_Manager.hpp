@@ -3,8 +3,10 @@
 #include "Internal/ComponentManager.hpp"
 #include "Internal/EntityManager.hpp"
 #include "Internal/SystemManager.hpp"
+#include "Name.hpp"
 #include "Types.h"
 #include <memory>
+#include <string>
 namespace SEngine{
 class ECS_Manager
 {
@@ -24,7 +26,16 @@ public:
 	// Entity methods
 	Entity CreateEntity()
 	{
-		return mEntityManager->CreateEntity();
+		Entity entity = mEntityManager->CreateEntity();
+		AddComponent<Name>(entity, Name {.name = "Entity(" + std::to_string(entity) + ")"});
+		return entity;
+	}
+
+	Entity CreateEntity(std::string name)
+	{
+		Entity entity = mEntityManager->CreateEntity();
+		AddComponent<Name>(entity, Name {.name = name});
+		return entity;
 	}
 
 	void DestroyEntity(Entity entity)

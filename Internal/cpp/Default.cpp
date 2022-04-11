@@ -1,4 +1,5 @@
 #include "Default.hpp"
+#include <string>
 #include "Internal/PropertyView.hpp"
 #include "Internal/SceneView.hpp"
 #include "Internal/ViewBuilder.hpp"
@@ -7,6 +8,7 @@
 #include "Transform.hpp"
 #include "Velocity.hpp"
 #include "Mesh.hpp"
+#include "Name.hpp"
 #include "MeshRenderer.hpp"
 #include "LightSource.hpp"
 #include "ECS_Manager.hpp"
@@ -25,6 +27,7 @@ std::shared_ptr<RenderSystem>   Default::renderSystem   = nullptr;
 std::shared_ptr<MoveSystem>     Default::moveSystem     = nullptr;
 std::shared_ptr<LightSystem>    Default::lightSystem    = nullptr;
 std::shared_ptr<TransformSystem>Default::transformSystem= nullptr;
+std::shared_ptr<GetEntitySystem>Default::getEntitySystem= nullptr;
 
 glm::vec3 lightPos(0.0f, 1.0f, 0.0f);
 #define CUBE_VERTICIES {-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f, 0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f, 0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f, 0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,-0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,-0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,-0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,-0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f, 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f, 0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f, 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f, 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f, 0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f, 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f, 0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f, 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f, 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,-0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f, 0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f, 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f, 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f, EOD}
@@ -42,11 +45,13 @@ void Default::Generate(){
     ECS_Manager::ecsManager->RegisterComponent<Mesh>();
     ECS_Manager::ecsManager->RegisterComponent<MeshRenderer>();
     ECS_Manager::ecsManager->RegisterComponent<LightSource>();
+    ECS_Manager::ecsManager->RegisterComponent<Name>();
 
     moveSystem      = ECS_Manager::ecsManager->RegisterSystem<MoveSystem>();
     renderSystem    = ECS_Manager::ecsManager->RegisterSystem<RenderSystem>();
     lightSystem     = ECS_Manager::ecsManager->RegisterSystem<LightSystem>();
-    transformSystem     = ECS_Manager::ecsManager->RegisterSystem<TransformSystem>();
+    transformSystem = ECS_Manager::ecsManager->RegisterSystem<TransformSystem>();
+    getEntitySystem = ECS_Manager::ecsManager->RegisterSystem<GetEntitySystem>();
 
     Signature signature;
 
@@ -72,6 +77,11 @@ void Default::Generate(){
     sig4.set(ECS_Manager::ecsManager->GetComponentType<Transform>());
     ECS_Manager::ecsManager->SetSystemSignature<TransformSystem>(sig4);
 
+    Signature sigForGetEntitySystem;
+
+    sigForGetEntitySystem.set(ECS_Manager::ecsManager->GetComponentType<Name>());
+    ECS_Manager::ecsManager->SetSystemSignature<GetEntitySystem>(sigForGetEntitySystem);
+
     defaultShader = new Shader(
         "/Users/chenyuxuansam/dev/SEngine3D/SEngine3D/Assets/Shaders/OneColor.vs",
         "/Users/chenyuxuansam/dev/SEngine3D/SEngine3D/Assets/Shaders/OneColor.fs"
@@ -82,7 +92,8 @@ void Default::Generate(){
     );
     Material* mat = Renderer::CreateMaterial(defaultShader, Color);
     Material* lightMat = Renderer::CreateMaterial(lightShader, nullptr);
-    Entity light = ECS_Manager::ecsManager->CreateEntity();
+    Entity light = ECS_Manager::ecsManager->CreateEntity("light");
+
     ECS_Manager::ecsManager->AddComponent(
 		light,
 		Transform{
