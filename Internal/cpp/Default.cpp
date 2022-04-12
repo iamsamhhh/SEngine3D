@@ -1,10 +1,7 @@
 #include "Default.hpp"
 #include <string>
-#include "Internal/PropertyView.hpp"
-#include "Internal/SceneView.hpp"
-#include "Internal/ViewBuilder.hpp"
 #include "Internal/Renderer.hpp"
-#include "Internal/DebugView.hpp"
+#include "Internal/ViewBuilder.hpp"
 #include "Transform.hpp"
 #include "Velocity.hpp"
 #include "Mesh.hpp"
@@ -20,6 +17,8 @@ namespace SEngine{
 bool Default::sceneIsOpen    = true;
 bool Default::propertyIsOpen = true;
 bool Default::debugIsOpen    = true;
+bool Default::hierarchyIsOpen= true;
+
 Material* Default::defaultMat = nullptr;
 Shader* Default::defaultShader = nullptr;
 
@@ -28,6 +27,10 @@ std::shared_ptr<MoveSystem>     Default::moveSystem     = nullptr;
 std::shared_ptr<LightSystem>    Default::lightSystem    = nullptr;
 std::shared_ptr<TransformSystem>Default::transformSystem= nullptr;
 std::shared_ptr<GetEntitySystem>Default::getEntitySystem= nullptr;
+std::shared_ptr<DebugView>      Default::debugView      = nullptr;
+std::shared_ptr<PropertyView>   Default::propertyView   = nullptr;
+std::shared_ptr<SceneView>      Default::sceneView      = nullptr;
+std::shared_ptr<HierarchyView>  Default::hierarchyView  = nullptr;
 
 glm::vec3 lightPos(0.0f, 1.0f, 0.0f);
 #define CUBE_VERTICIES {-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f, 0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f, 0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f, 0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,-0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,-0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,-0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,-0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f, 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f, 0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f, 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f, 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f, 0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f, 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f, 0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f, 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f, 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,-0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f, 0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f, 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f, 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f, EOD}
@@ -122,14 +125,14 @@ void Default::Generate(){
 	    }
     );
 
-  std::vector<Entity> entities(3);
+  std::vector<Entity> entities(15);
   for (auto& entity : entities) {
     entity = ECS_Manager::ecsManager->CreateEntity();
 
 	  ECS_Manager::ecsManager->AddComponent(
 		entity,
 		Transform{
-			.position   = glm::vec3((entity-1)*1.5, 0, 0),
+			.position   = glm::vec3((entity-1), 0, 0),
       .heading    = 0,
       .pitch      = 0,
 			.scale      = glm::vec3(1, 1, 1)
@@ -162,8 +165,13 @@ void Default::Generate(){
     renderSystem->Init();
 
     // -----------------------------------Editor views init------------------------------------
-    ViewBuilder::AddView(new PropertyView(&propertyIsOpen));
-    ViewBuilder::AddView(new SceneView(&sceneIsOpen));
-    ViewBuilder::AddView(new DebugView(&debugIsOpen));
+    debugView     = std::make_shared<DebugView>(&Default::debugIsOpen);
+    sceneView     = std::make_shared<SceneView>(&Default::sceneIsOpen);
+    hierarchyView = std::make_shared<HierarchyView>(&Default::hierarchyIsOpen);
+    propertyView  = std::make_shared<PropertyView>(&Default::propertyIsOpen);
+    ViewBuilder::AddView(debugView);
+    ViewBuilder::AddView(sceneView);
+    ViewBuilder::AddView(hierarchyView);
+    ViewBuilder::AddView(propertyView);
 }
 }

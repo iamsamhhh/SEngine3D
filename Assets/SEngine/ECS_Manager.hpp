@@ -47,6 +47,13 @@ public:
 		mSystemManager->EntityDestroyed(entity);
 	}
 
+	const char* GetTypeName(ComponentType id){
+		return mComponentManager->GetTypeName(id);
+	}
+
+	uint32_t GetEntityCount(){
+		return mEntityManager->GetEntityCount();
+	}
 
 	// Component methods
 	template<typename T>
@@ -90,7 +97,10 @@ public:
 	{
 		return mComponentManager->GetComponentType<T>();
 	}
-
+	template<typename T>
+	bool ComponentExistForEntity(Entity id){
+		return mComponentManager->ComponentExistForEntity<T>(id);
+	}
 
 	// System methods
 	template<typename T>
@@ -103,6 +113,10 @@ public:
 	void SetSystemSignature(Signature signature)
 	{
 		mSystemManager->SetSignature<T>(signature);
+	}
+
+	Signature GetEntitySignature(Entity id){
+		return mEntityManager->GetSignature(id);
 	}
 
 private:

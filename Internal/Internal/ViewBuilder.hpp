@@ -6,8 +6,8 @@ class ViewBuilder
 private:
     static int count;
 public:
-    static void AddView(EditorView* view);
+    static void AddView(std::shared_ptr<EditorView> view);
     static int GetCount();
-    static EditorView* views[MAX_VIEW_NUM];
+    static std::shared_ptr<EditorView> views[MAX_VIEW_NUM];
 };
 }

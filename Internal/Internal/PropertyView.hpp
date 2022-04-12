@@ -1,23 +1,22 @@
 #pragma once
+
 #include "EditorView.hpp"
 #include "Transform.hpp"
-#include "Default.hpp"
+#include "Types.h"
 
 using namespace SEngine;
 
 namespace SEngine_Internal{
 class PropertyView : public EditorView
 {
+private:
+    bool hasEntitySelected = false;
+    Entity selectedEntity;
 public:
     PropertyView(bool* IsOpen) : EditorView("Properties", IsOpen){
-        trans = Default::transformSystem->GetTransform(0);
-        pos[0]=trans->position.x;
-        pos[1]=trans->position.y;
-        pos[2]=trans->position.z;
-        
+        SetSelectedEntity(false);
     }
     void OnRender() override;
-    float pos[3];
-    Transform* trans;
+    bool SetSelectedEntity(bool hasEntitySelected, Entity entity = 0);
 };
 }

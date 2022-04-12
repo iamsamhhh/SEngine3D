@@ -1,9 +1,9 @@
 #include "Internal/ViewBuilder.hpp"
 namespace SEngine_Internal{
 int ViewBuilder::count = 0;
-EditorView* ViewBuilder::views[] = {};
+std::shared_ptr<EditorView> ViewBuilder::views[] = {};
 
-void ViewBuilder::AddView(EditorView* view){
+void ViewBuilder::AddView(std::shared_ptr<EditorView> view){
     views[count] = view;
     count++;
 }

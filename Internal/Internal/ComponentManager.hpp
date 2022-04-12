@@ -19,6 +19,8 @@ public:
 		// Add this component type to the component type map
 		mComponentTypes.insert({typeName, mNextComponentType});
 
+		mTypeNames.insert({mNextComponentType, typeName});
+
 		// Create a ComponentArray pointer and add it to the component arrays map
 		mComponentArrays.insert({typeName, std::make_shared<ComponentArray<T>>()});
 
@@ -35,6 +37,11 @@ public:
 
 		// Return this component's type - used for creating signatures
 		return mComponentTypes[typeName];
+	}
+
+	const char* GetTypeName(ComponentType id){
+		assert(mTypeNames.find(id) != mTypeNames.end() && "Component not registered");
+		return mTypeNames[id];
 	}
 
 	template<typename T>
@@ -58,6 +65,11 @@ public:
 		return GetComponentArray<T>()->GetData(entity);
 	}
 
+	template<typename T>
+	bool ComponentExistForEntity(Entity id){
+		return GetComponentArray<T>()->DataExistInEntity(id);
+	}
+
 	void EntityDestroyed(Entity entity)
 	{
 		// Notify each component array that an entity has been destroyed
@@ -71,6 +83,8 @@ public:
 	}
 
 private:
+	std::unordered_map<uint16_t, const char*> mTypeNames{};
+
 	// Map from type string pointer to a component type
 	std::unordered_map<const char*, ComponentType> mComponentTypes{};
 
