@@ -15,6 +15,7 @@ Engine::~Engine()
     delete mWindow;
     glfwTerminate();
     LoggingSystem::ShutDown();
+    app->OnAppEnd();
 }
 
 void RenderAll(){
@@ -22,8 +23,8 @@ void RenderAll(){
 }
 
 void Engine::Init(){
-
-    mWindow = new MainWindow("SEngine", 1080, 720, RenderAll);
+    app = SEngine::CreatApplication();
+    mWindow = new MainWindow(app->GetName(), 1080, 720, RenderAll);
 
     Renderer::Init();
 
@@ -33,6 +34,7 @@ void Engine::Init(){
     LoggingSystem::Init();
 
     Default::Generate();
+    app->OnAppStart();
 }
 
 void Engine::ProcessInput(){
@@ -76,6 +78,7 @@ void Engine::Loop(){
     while (!mWindow->WindowShouldClose())
     {
         ProcessInput();
+        app->OnAppUpdate();
         Default::moveSystem->Update();
         Render();
     }
